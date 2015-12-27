@@ -1,8 +1,12 @@
 package discounty.com.activities;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import discounty.com.R;
 
@@ -42,9 +47,42 @@ public class Main2Activity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        ((Button)findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+//                intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
+                startActivityForResult(intent, 0);
+            }
+        });
+    }
+
+    public void OnScan(View v) {
+        Intent data = new Intent("com.google.zxing.client.android.SCAN");
+//        data.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
+        startActivityForResult(data, 0);
     }
 
 
+    private String contents, format;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            if (resultCode == RESULT_OK) {
+
+            } else if (resultCode == RESULT_CANCELED)
+                Log.i("App", "RESULT_CANCELED");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
     @Override
     public void onBackPressed() {

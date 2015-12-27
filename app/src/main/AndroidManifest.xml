@@ -24,7 +24,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
@@ -38,7 +38,18 @@
         <activity
             android:name=".activities.Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+
+        <activity
+            android:name="discounty.com.google.zxing.client.android.CaptureActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.google.zxing.client.android.SCAN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

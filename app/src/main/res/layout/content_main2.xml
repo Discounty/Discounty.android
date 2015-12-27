@@ -12,86 +12,12 @@
     tools:context="discounty.com.activities.Main2Activity"
     tools:showIn="@layout/app_bar_main2">
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Target"
-        android:id="@+id/textView2"
+        android:text="Start Scanner"
+        android:id="@+id/button"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="74dp"
-        android:textColor="@color/white"
-        android:textSize="40dip"/>
-
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceLarge"
-    android:text="Citrus"
-    android:id="@+id/textView3"
-    android:textColor="@color/white"
-    android:textSize="40dip"
-    android:layout_below="@+id/textView2"
-    android:layout_alignStart="@+id/textView2"
-    android:layout_marginTop="10dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Sport Master"
-        android:id="@+id/textView4"
-        android:textColor="@color/white"
-        android:textSize="40dip"
-        android:layout_below="@+id/textView3"
-        android:layout_alignStart="@+id/textView3"
-        android:layout_marginTop="10dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Card 4"
-        android:id="@+id/textView5"
-        android:textColor="@color/white"
-        android:textSize="40dip"
-        android:layout_below="@+id/textView4"
-        android:layout_alignStart="@+id/textView4"
-        android:layout_marginTop="10dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Card 5"
-        android:id="@+id/textView6"
-        android:textColor="@color/white"
-        android:textSize="40dip"
-        android:layout_below="@+id/textView5"
-        android:layout_alignStart="@+id/textView5"
-        android:layout_marginTop="10dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Card 6"
-        android:id="@+id/textView7"
-        android:textColor="@color/white"
-        android:textSize="40dip"
-        android:layout_below="@+id/textView6"
-        android:layout_alignStart="@+id/textView6" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Cards List:"
-        android:id="@+id/textView8"
-        android:layout_alignParentTop="true"
-        android:textColor="@color/white"
-        android:textSize="50dip"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="172dp" />
 </RelativeLayout>
