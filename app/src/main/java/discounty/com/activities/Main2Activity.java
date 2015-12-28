@@ -1,27 +1,33 @@
 package discounty.com.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 import discounty.com.R;
+import discounty.com.api.ServiceGenerator;
+import discounty.com.interfaces.DiscountyService;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private String contents, format;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +37,9 @@ public class Main2Activity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Welcome to Discounty!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view -> Snackbar.make(view, "Welcome to Discounty!", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -48,14 +50,38 @@ public class Main2Activity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ((Button)findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+
+        ((Button) findViewById(R.id.button)).setOnClickListener(view -> {
+            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 //                intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
-                startActivityForResult(intent, 0);
-            }
+            startActivityForResult(intent, 0);
         });
+
+        DiscountyService discountyService = ServiceGenerator.createService(DiscountyService.class);
+
+        try {
+            discountyService.getTestGetHello()
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
+                            Log.d("onCompleted()", "REQUEST COMPLETED");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d("onError()", e.getMessage());
+                        }
+
+                        @Override
+                        public void onNext(String s) {
+                            Log.d("onNext()", s);
+                        }
+                    });
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void OnScan(View v) {
@@ -63,9 +89,6 @@ public class Main2Activity extends AppCompatActivity
 //        data.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
         startActivityForResult(data, 0);
     }
-
-
-    private String contents, format;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

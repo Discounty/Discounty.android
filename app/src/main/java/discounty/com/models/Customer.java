@@ -2,6 +2,8 @@ package discounty.com.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /*
  * This class represents the Customer model.
  * It consists of fields that are returned from
@@ -36,6 +38,18 @@ public class Customer {
 
     @SerializedName("updated_at")
     private String updatedAt;
+
+    public List<CardBarcode> getBarcodes() {
+        return barcodes;
+    }
+
+    public void setBarcodes(List<CardBarcode> barcodes) {
+        this.barcodes = barcodes;
+    }
+
+    @SerializedName("barcodes")
+
+    private List<CardBarcode> barcodes;
 
     public Integer getId() {
         return id;
@@ -121,6 +135,7 @@ public class Customer {
                 ", country='" + country + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
+                ", barcodes=" + barcodes +
                 '}';
     }
 }
