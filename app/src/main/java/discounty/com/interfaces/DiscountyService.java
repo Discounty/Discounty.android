@@ -1,8 +1,11 @@
 package discounty.com.interfaces;
 
+import discounty.com.models.AccessToken;
 import discounty.com.models.Customer;
 import discounty.com.models.DiscountCard;
 import retrofit.http.DELETE;
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.PUT;
@@ -11,6 +14,10 @@ import retrofit.http.Query;
 import rx.Observable;
 
 public interface DiscountyService {
+
+    String ACCESS_GRANT_TYPE = "password";
+
+    String REFRESH_GRANT_TYPE = "refresh_token";
 
     @POST("/api/v1/customers/full_info")
     Observable<Customer> getFullCustomerInfo();
@@ -57,7 +64,17 @@ public interface DiscountyService {
     @GET("/api/test/hello.json")
     Observable<String> getTestGetHello();
 
-    @POST("/api" +
-            "/test/hello.json")
+    @POST("/api/test/hello.json")
     Observable<String> getTestPostHello();
+
+    @POST("/oauth/token")
+    @FormUrlEncoded
+    Observable<AccessToken> getAccessToken(@Field("grant_type") String grantType,
+                                           @Field("username") String email,
+                                           @Field("password") String password);
+
+    @POST("/oauth/token")
+    @FormUrlEncoded
+    Observable<AccessToken> refreshAccessToken(@Field("grant_type") String grantType,
+                                               @Field("refresh_token") String refreshToken);
 }

@@ -10,11 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import discounty.com.R;
-import discounty.com.horrible.ApiInterationWorker;
 
 public class MainActivity extends AppCompatActivity {
 
-    ApiInterationWorker API = new ApiInterationWorker();
+//    ApiInterationWorker API = new ApiInterationWorker();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
