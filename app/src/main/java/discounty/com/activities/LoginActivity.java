@@ -38,6 +38,7 @@ import discounty.com.R;
 import discounty.com.api.ServiceGenerator;
 import discounty.com.authenticator.AccountGeneral;
 import discounty.com.interfaces.DiscountyService;
+import discounty.com.models.AccessToken;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -57,6 +58,8 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Loade
     public final static String KEY_ERROR_MESSAGE = "ERR_MSG";
 
     public static final String PARAM_USER_PASS = "USER_PASS";
+
+    public static final String KEY_REFRESH_TOKEN = "REFRESH_TOKEN";
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -178,17 +181,20 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Loade
             protected Intent doInBackground(String... params) {
 
                 Log.d("Discounty", TAG + " > Started authenticating");
-                String authtoken = null;
+                String authtoken, refreshtoken;
                 Bundle data = new Bundle();
 
                 try {
-                    authtoken = discountyService.getAccessToken(DiscountyService.ACCESS_GRANT_TYPE,
-                            username, password).toBlocking().first().getAccessToken();
+                    AccessToken accessToken = discountyService.getAccessToken(DiscountyService.ACCESS_GRANT_TYPE,
+                            username, password).toBlocking().first();
+                    authtoken = accessToken.getAccessToken();
+                    refreshtoken = accessToken.getRefreshToken();
 
                     data.putString(AccountManager.KEY_ACCOUNT_NAME, username);
                     data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
                     data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
                     data.putString(PARAM_USER_PASS, password);
+                    data.putString(KEY_REFRESH_TOKEN, refreshtoken);
                 } catch (Exception e) {
                     data.putString(KEY_ERROR_MESSAGE, e.getMessage());
                 }
@@ -213,13 +219,17 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Loade
     private void finishLogin(Intent intent) {
         String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
         String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
+
         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
 
         if (getIntent().getBooleanExtra(ARG_IS_ADDING_ACCOUNT, false)) {
             String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
             String authtokenType = authTokenType;
+            String refreshToken = intent.getStringExtra(KEY_REFRESH_TOKEN);
+            Bundle userData = new Bundle();
+            userData.putString(KEY_REFRESH_TOKEN, refreshToken);
 
-            accountManager.addAccountExplicitly(account, accountPassword, null);
+            accountManager.addAccountExplicitly(account, accountPassword, userData);
             accountManager.setAuthToken(account, authtokenType, authtoken);
         } else {
             accountManager.setPassword(account, accountPassword);

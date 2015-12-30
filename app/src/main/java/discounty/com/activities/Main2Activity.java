@@ -8,6 +8,7 @@ import android.accounts.AuthenticatorException;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -107,7 +108,7 @@ public class Main2Activity extends AppCompatActivity
     }
 
     private void addNewAccount(AccountManager manager) {
-        accountManager.addAccount("com.discounty", AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, null, this,
+        manager.addAccount("com.discounty", AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, null, this,
                 accountManagerFuture -> {
                     try {
                         accountManagerFuture.getResult();
@@ -186,20 +187,48 @@ public class Main2Activity extends AppCompatActivity
     }
 
     private void performLogout() {
-        Account[] accounts = accountManager.getAccountsByType("com.discounty");
+        Account[] accounts = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE);
         if (accounts.length != 0) {
             Log.d("ACCOUNT", accounts[0].toString());
-            accountManager.removeAccount(accounts[0], accountManagerFuture -> {
-                try {
-                    if (accountManagerFuture.getResult()) {
-                        Log.d("ACCOUNT", "REMOVED");
-                        finish();
-                        startActivity(new Intent(Main2Activity.this, LoginActivity.class));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }, null);
+//            accountManager.clearPassword(accounts[0]);
+//            accountManager.invalidateAuthToken();
+            Log.d("ACCOUNT TOKEN TYPE", accounts[0].type);
+            Log.d("ACCOUNT TOKEN NAME", accounts[0].name);
+
+            accountManager.clearPassword(accounts[0]);
+            accountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE,
+                    accountManager.getAuthToken(accounts[0], AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, true,
+                            accountManagerFuture -> {
+                                try {
+                                    Log.d("invalidateAuthToken", accountManagerFuture.getResult().toString());
+                                } catch (android.accounts.OperationCanceledException | AuthenticatorException | IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }, null).toString());
+
+            if (Build.VERSION.SDK_INT < 23) { // use deprecated method
+              accountManager.removeAccount(accounts[0], accountManagerFuture -> {
+                  try {
+                      if (accountManagerFuture.getResult()) {
+                          Log.d("Deprecated ACCOUNT REMOVAL", "ACCOUNT  REMOVED");
+
+                      }
+                  } catch (android.accounts.OperationCanceledException | IOException | AuthenticatorException e) {
+                      e.printStackTrace();
+                  }
+              }, null);
+          } else {
+              accountManager.removeAccount(accounts[0], this, accountManagerFuture -> {
+                  try {
+                      if (accountManagerFuture.getResult() != null) {
+                          Log.d("ACCOUNT REMOVAL", "ACCOUNT REMOVED");
+                      }
+                  } catch (android.accounts.OperationCanceledException | AuthenticatorException | IOException e) {
+                      e.printStackTrace();
+                  }
+              }, null);
+          }
+//            accountManager.removeAccountExplicitly(accounts[0]);
         }
     }
 

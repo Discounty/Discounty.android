@@ -13,10 +13,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import discounty.com.R;
 import discounty.com.activities.LoginActivity;
 import discounty.com.api.ServiceGenerator;
 import discounty.com.interfaces.DiscountyService;
+import discounty.com.models.AccessToken;
 
 /**
  * This class is responsible for account
@@ -56,6 +56,14 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator implement
     }
 
     @Override
+    public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account) throws NetworkErrorException {
+        Bundle bundle = new Bundle();
+        boolean allowed = true;
+        bundle.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, allowed);
+        return bundle;
+    }
+
+    @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse accountAuthenticatorResponse, Account account, Bundle bundle) throws NetworkErrorException {
         return null;
     }
@@ -78,11 +86,14 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator implement
 
         if (TextUtils.isEmpty(authToken)) {
             final String password = manager.getPassword(account);
+            final String refreshToken = manager.getUserData(account, LoginActivity.KEY_REFRESH_TOKEN);
             if (password != null) {
                 try {
-                    Log.d("Discounty", TAG + " > re-authenticating with existing password");
-                    authToken = discountyService.getAccessToken(DiscountyService.ACCESS_GRANT_TYPE,
-                            account.name, password).toBlocking().first().getAccessToken();
+                    Log.d("Discounty", TAG + " > re-authenticating with existing password and refresh token");
+                    AccessToken accessToken = discountyService.refreshAccessToken(DiscountyService.ACCESS_GRANT_TYPE, refreshToken)
+                            .toBlocking().first();
+                    authToken = accessToken.getAccessToken();
+                    manager.setUserData(account, LoginActivity.KEY_REFRESH_TOKEN, accessToken.getRefreshToken());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

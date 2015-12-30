@@ -1,0 +1,43 @@
+package discounty.com.data.models;
+
+
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
+@Table(name = "DiscountCards")
+public class DiscountCard extends Model {
+
+    @Column(name = "Name")
+    public String name;
+
+    @Column(name = "Description")
+    public String description;
+
+    @Column(name = "Barcode")
+    public Barcode barcode;
+
+    @Column(name = "CreatedAt")
+    public Long createdAt;
+
+    @Column(name = "UpdatedAt")
+    public Long updatedAt;
+
+    @Column(name = "Customer")
+    public Customer customer;
+
+    public DiscountCard() {
+        super();
+    }
+
+    public DiscountCard(String name, String description, Barcode barcode,
+                        Long createdAt, Long updatedAt, Customer customer) {
+        super();
+        this.name = name;
+        this.description = description;
+        this.barcode = barcode;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.customer = customer;
+    }
+}
