@@ -1,14 +1,19 @@
 package discounty.com.data.models;
 
+import android.provider.BaseColumns;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-@Table(name = "Shops")
+@Table(name = "Shops", id = BaseColumns._ID)
 public class Shop extends Model {
 
     @Column(name = "Name")
     public String name;
+
+    @Column(name = "needsSync")
+    public boolean needsSync;
 
     @Column(name = "Description")
     public String description;

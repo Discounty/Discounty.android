@@ -1,15 +1,20 @@
 package discounty.com.data.models;
 
 
+import android.provider.BaseColumns;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-@Table(name = "DiscountCards")
+@Table(name = "DiscountCards", id = BaseColumns._ID)
 public class DiscountCard extends Model {
 
     @Column(name = "Name")
     public String name;
+
+    @Column(name = "needsSync")
+    public boolean needsSync;
 
     @Column(name = "Description")
     public String description;

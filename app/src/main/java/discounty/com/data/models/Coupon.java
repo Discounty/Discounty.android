@@ -1,14 +1,23 @@
 package discounty.com.data.models;
 
+import android.provider.BaseColumns;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-@Table(name = "Coupons")
+@Table(name = "Coupons", id = BaseColumns._ID)
 public class Coupon extends Model {
+
+
+    @Column(name = "Name")
+    public String name;
 
     @Column(name = "Description")
     public String description;
+
+    @Column(name = "needsSync")
+    public boolean needsSync;
 
     @Column(name = "CreatedAt")
     public Long createdAt;
@@ -19,7 +28,7 @@ public class Coupon extends Model {
     @Column(name = "Barcode")
     public Barcode barcode;
 
-    @Column(name = "Customer")
+    @Column(name = "Customer", onDelete = Column.ForeignKeyAction.CASCADE)
     public Customer customer;
 
     public Coupon() {

@@ -1,14 +1,19 @@
 package discounty.com.data.models;
 
+import android.provider.BaseColumns;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-@Table(name = "Barcodes")
+@Table(name = "Barcodes", id = BaseColumns._ID)
 public class Barcode extends Model {
 
     @Column(name = "Barcode")
     public String barcode;
+
+    @Column(name = "needsSync")
+    public boolean needsSync;
 
     @Column(name = "DiscountPercentage")
     public Double discountPercentage;
@@ -25,7 +30,7 @@ public class Barcode extends Model {
     @Column(name = "BarcodeType")
     public BarcodeType barcodeType;
 
-    @Column(name = "Customer")
+    @Column(name = "Customer", onDelete = Column.ForeignKeyAction.CASCADE)
     public Customer customer;
 
     public Barcode() {

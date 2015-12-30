@@ -1,14 +1,19 @@
 package discounty.com.data.models;
 
+import android.provider.BaseColumns;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-@Table(name = "Feedbacks")
+@Table(name = "Feedbacks", id = BaseColumns._ID)
 public class Feedback extends Model {
 
     @Column(name = "Feedback")
     public String feedback;
+
+    @Column(name = "needsSync")
+    public boolean needsSync;
 
     @Column(name = "Rating")
     public Short rating;
@@ -19,7 +24,7 @@ public class Feedback extends Model {
     @Column(name = "UpdatedAt")
     public Long updatedAt;
 
-    @Column(name = "Customer")
+    @Column(name = "Customer", onDelete = Column.ForeignKeyAction.CASCADE)
     public Customer customer;
 
     public Feedback() {

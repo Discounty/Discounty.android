@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="com.discounty.KEY_SYNC"
+        android:title="Synchronization">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="com.discounty.KEY_AUTO_SYNC"
+            android:summary="Enable automatic synchronization"
+            android:title="Automatic synchronization" />
+
+        <ListPreference
+            android:defaultValue="@array/auto_sync_interval_values"
+            android:dependency="com.discounty.KEY_AUTO_SYNC"
+            android:entries="@array/auto_sync_intervals"
+            android:entryValues="@array/auto_sync_interval_values"
+            android:key="com.discounty.KEY_AUTO_SYNC_INTERVAL"
+            android:title="Synchronization interval " />
+
+    </PreferenceCategory>
+</PreferenceScreen>
