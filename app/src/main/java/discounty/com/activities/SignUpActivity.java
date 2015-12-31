@@ -4,12 +4,23 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Optional;
+import com.mobsandgeeks.saripaar.annotation.Password;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,22 +35,36 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements Validator.ValidationListener {
 
     @Bind(R.id.btn_login)
     TextView btnLogin;
+
     @Bind(R.id.btn_signup)
     Button btnSignup;
+
+    @NotEmpty(trim = true, message = "This field is required")
     @Bind(R.id.input_first_name)
     EditText inputFirstName;
+
+    @Optional
     @Bind(R.id.input_last_name)
     EditText inputLastName;
+
+    @NotEmpty(trim = true)
+    @Email
     @Bind(R.id.input_email)
     EditText inputEmail;
+
+    @Password(min = 8)
     @Bind(R.id.input_password)
     EditText inputPassword;
+
     private String TAG = getClass().getSimpleName();
+
     private String accountType;
+
+    private Validator validator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +75,20 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
 
+        validator = new Validator(this);
+        validator.setValidationListener(this);
+
         btnLogin.setOnClickListener(v -> {
             setResult(RESULT_CANCELED);
             finish();
         });
 
         btnSignup.setOnClickListener(v -> {
-            createAccount();
+            validator.validate(true);
         });
     }
 
     private void createAccount() {
-        //TODO validation
-
         new AsyncTask<String, Void, Intent>() {
 
             final DiscountyService discountyService = ServiceGenerator.createService(DiscountyService.class);
@@ -158,5 +184,24 @@ public class SignUpActivity extends AppCompatActivity {
     public void onBackPressed() {
         setResult(RESULT_CANCELED);
         super.onBackPressed();
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+        createAccount();
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                Snackbar.make(view, message, Snackbar.LENGTH_LONG).setAction(message, null).show();
+            }
+        }
     }
 }

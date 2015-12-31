@@ -29,3 +29,6 @@
 }
 
 -dontwarn java.lang.invoke.*
+
+-keep class com.mobsandgeeks.saripaar.** { *; }
+-keep @com.mobsandgeeks.saripaar.annotation.ValidateUsing class * { *; }

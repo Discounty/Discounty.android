@@ -22,12 +22,16 @@ import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +49,8 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AccountAuthenticatorActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AccountAuthenticatorActivity
+        implements LoaderCallbacks<Cursor>, Validator.ValidationListener {
 
     public final static String ARG_ACCOUNT_TYPE = "ACCOUNT_TYPE";
 
@@ -72,20 +77,38 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Loade
             "foo@example.com:hello", "bar@example.com:world",
             "yakovenko.denis.a@gmail.com:password", "a@:aaaaa"
     };
+
     final DiscountyService discountyService = ServiceGenerator.createService(DiscountyService.class);
+
     private final int REQ_SIGNUP = 1;
+
     private final String TAG = this.getClass().getSimpleName();
+
+    private Validator validator;
+
     // UI references.
+    @NotEmpty
+    @Email
     @Bind(R.id.input_email)
     EditText mEmailInput;
+
+    @NotEmpty
     @Bind(R.id.input_password)
     EditText mPasswordInput;
+
     @Bind(R.id.login_progress)
     View mProgressView;
+
     @Bind(R.id.login_form)
     View mLoginFormView;
+
+    @Bind(R.id.btn_login)
+    Button btnLogin;
+
     private AccountManager accountManager;
+
     private String authTokenType;
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -96,6 +119,9 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Loade
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        validator = new Validator(this);
+        validator.setValidationListener(this);
 
         accountManager = AccountManager.get(getBaseContext());
 
@@ -115,16 +141,18 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Loade
         populateAutoComplete();
 
         mPasswordInput = (EditText) findViewById(R.id.input_password);
-        mPasswordInput.setOnEditorActionListener((textView, id, keyEvent) -> {
-            if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                attemptLogin();
-                return true;
-            }
-            return false;
-        });
+//        mPasswordInput.setOnEditorActionListener((textView, id, keyEvent) -> {
+//            if (id == R.id.login || id == EditorInfo.IME_NULL) {
+//                attemptLogin();
+//                return true;
+//            }
+//            return false;
+//        });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.btn_login);
-        mEmailSignInButton.setOnClickListener(view -> submit());
+//        Button mEmailSignInButton = (Button) findViewById(R.id.btn_login);
+//        mEmailSignInButton.setOnClickListener(view -> submit());
+
+        btnLogin.setOnClickListener(v -> validator.validate(true) );
 
         TextView mSignup = (TextView) findViewById(R.id.btn_signup);
         mSignup.setOnClickListener(v -> {
@@ -178,6 +206,12 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Loade
 
         new AsyncTask<String, Void, Intent>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showProgress(true);
+            }
+
+            @Override
             protected Intent doInBackground(String... params) {
 
                 Log.d("Discounty", TAG + " > Started authenticating");
@@ -206,6 +240,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Loade
 
             @Override
             protected void onPostExecute(Intent intent) {
+                showProgress(false);
                 if (intent.hasExtra(KEY_ERROR_MESSAGE)) {
                     Toast.makeText(getBaseContext(), intent.getStringExtra(KEY_ERROR_MESSAGE),
                             Toast.LENGTH_LONG).show();
@@ -256,12 +291,8 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Loade
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(mEmailInput, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
+                    .setAction(android.R.string.ok, v -> {
+                        requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
                     });
         } else {
             requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
@@ -424,6 +455,25 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Loade
 //        mEmailInput.setAdapter(adapter);
     }
 
+    @Override
+    public void onValidationSucceeded() {
+        submit();
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                Snackbar.make(view, message, Snackbar.LENGTH_LONG).setAction(message, null).show();
+            }
+        }
+    }
+
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -479,7 +529,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Loade
 
             if (success) {
                 finish();
-                startActivity(new Intent(LoginActivity.this, Main2Activity.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             } else {
                 mPasswordInput.setError(getString(R.string.error_incorrect_password));
                 mPasswordInput.requestFocus();
