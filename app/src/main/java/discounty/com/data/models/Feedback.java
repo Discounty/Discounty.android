@@ -31,12 +31,14 @@ public class Feedback extends Model {
         super();
     }
 
-    public Feedback(String feedback, Short rating, Long createdAt, Long updatedAt, Customer customer) {
+    public Feedback(String feedback, Short rating, Long createdAt, Long updatedAt,
+                    Customer customer, boolean needsSync) {
         super();
         this.feedback = feedback;
         this.rating = rating;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.customer = customer;
+        this.needsSync = needsSync;
     }
 }

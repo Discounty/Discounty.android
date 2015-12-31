@@ -35,12 +35,14 @@ public class Coupon extends Model {
         super();
     }
 
-    public Coupon(String description, Long createdAt, Long updatedAt, Barcode barcode, Customer customer) {
+    public Coupon(String description, Long createdAt, Long updatedAt, Barcode barcode,
+                  Customer customer, boolean needsSync) {
         super();
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.barcode = barcode;
         this.customer = customer;
+        this.needsSync = needsSync;
     }
 }

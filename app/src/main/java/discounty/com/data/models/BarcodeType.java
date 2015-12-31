@@ -25,10 +25,11 @@ public class BarcodeType extends Model {
         super();
     }
 
-    public BarcodeType(String barcodeType, Long createdAt, Long updatedAt) {
+    public BarcodeType(String barcodeType, Long createdAt, Long updatedAt, boolean needsSync) {
         super();
         this.barcodeType = barcodeType;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.needsSync = needsSync;
     }
 }

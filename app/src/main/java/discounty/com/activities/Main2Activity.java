@@ -2,8 +2,6 @@ package discounty.com.activities;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -13,7 +11,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.os.OperationCanceledException;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -74,7 +71,7 @@ public class Main2Activity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        ((Button) findViewById(R.id.button)).setOnClickListener(view -> {
+        findViewById(R.id.button).setOnClickListener(view -> {
             Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 //                intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
             startActivityForResult(intent, 0);
@@ -187,48 +184,37 @@ public class Main2Activity extends AppCompatActivity
     }
 
     private void performLogout() {
-        Account[] accounts = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE);
-        if (accounts.length != 0) {
-            Log.d("ACCOUNT", accounts[0].toString());
-//            accountManager.clearPassword(accounts[0]);
-//            accountManager.invalidateAuthToken();
-            Log.d("ACCOUNT TOKEN TYPE", accounts[0].type);
-            Log.d("ACCOUNT TOKEN NAME", accounts[0].name);
+        try {
+            Account[] accounts = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE);
+            if (accounts.length != 0) {
+                Log.d("ACCOUNT", accounts[0].toString());
+                Log.d("ACCOUNT TOKEN TYPE", accounts[0].type);
+                Log.d("ACCOUNT TOKEN NAME", accounts[0].name);
 
-            accountManager.clearPassword(accounts[0]);
-            accountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE,
-                    accountManager.getAuthToken(accounts[0], AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, true,
-                            accountManagerFuture -> {
-                                try {
-                                    Log.d("invalidateAuthToken", accountManagerFuture.getResult().toString());
-                                } catch (android.accounts.OperationCanceledException | AuthenticatorException | IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }, null).toString());
+                accountManager.clearPassword(accounts[0]);
+                accountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE,
+                        accountManager.getAuthToken(accounts[0], AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, true,
+                                accountManagerFuture -> {
+                                    try {
+                                        Log.d("invalidateAuthToken", accountManagerFuture.getResult().toString());
+                                    } catch (android.accounts.OperationCanceledException | AuthenticatorException | IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }, null).toString());
 
-            if (Build.VERSION.SDK_INT < 23) { // use deprecated method
-              accountManager.removeAccount(accounts[0], accountManagerFuture -> {
-                  try {
-                      if (accountManagerFuture.getResult()) {
-                          Log.d("Deprecated ACCOUNT REMOVAL", "ACCOUNT  REMOVED");
-
-                      }
-                  } catch (android.accounts.OperationCanceledException | IOException | AuthenticatorException e) {
-                      e.printStackTrace();
-                  }
-              }, null);
-          } else {
-              accountManager.removeAccount(accounts[0], this, accountManagerFuture -> {
-                  try {
-                      if (accountManagerFuture.getResult() != null) {
-                          Log.d("ACCOUNT REMOVAL", "ACCOUNT REMOVED");
-                      }
-                  } catch (android.accounts.OperationCanceledException | AuthenticatorException | IOException e) {
-                      e.printStackTrace();
-                  }
-              }, null);
-          }
-//            accountManager.removeAccountExplicitly(accounts[0]);
+                if (Build.VERSION.SDK_INT < 22) { // use deprecated method
+                    accountManager.removeAccount(accounts[0], null, null);
+                } else {
+                    accountManager.removeAccountExplicitly(accounts[0]);
+                }
+//                Intent intent = new Intent(Main2Activity.this, LoginActivity.class);
+//                intent.putExtra(LoginActivity.ARG_ACCOUNT_TYPE, AccountGeneral.ACCOUNT_TYPE);
+//                startActivity(intent);
+//                finish();
+                addNewAccount(accountManager);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

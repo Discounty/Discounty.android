@@ -36,7 +36,7 @@ public class DiscountCard extends Model {
     }
 
     public DiscountCard(String name, String description, Barcode barcode,
-                        Long createdAt, Long updatedAt, Customer customer) {
+                        Long createdAt, Long updatedAt, Customer customer, boolean needsSync) {
         super();
         this.name = name;
         this.description = description;
@@ -44,5 +44,6 @@ public class DiscountCard extends Model {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.customer = customer;
+        this.needsSync = needsSync;
     }
 }

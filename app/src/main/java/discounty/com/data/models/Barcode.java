@@ -37,7 +37,8 @@ public class Barcode extends Model {
         super();
     }
 
-    public Barcode(String barcode, Double discountPercentage, String extraInfo, Long createdAt, Long updatedAt, BarcodeType barcodeType, Customer customer) {
+    public Barcode(String barcode, Double discountPercentage, String extraInfo, Long createdAt, Long updatedAt,
+                   BarcodeType barcodeType, Customer customer, boolean needsSync) {
         super();
         this.barcode = barcode;
         this.discountPercentage = discountPercentage;
@@ -46,5 +47,6 @@ public class Barcode extends Model {
         this.updatedAt = updatedAt;
         this.barcodeType = barcodeType;
         this.customer = customer;
+        this.needsSync = needsSync;
     }
 }

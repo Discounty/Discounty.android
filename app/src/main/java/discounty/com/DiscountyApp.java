@@ -1,10 +1,6 @@
 package discounty.com;
 
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.ContentResolver;
-
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.app.Application;
 

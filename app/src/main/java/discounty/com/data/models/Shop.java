@@ -40,7 +40,8 @@ public class Shop extends Model {
         super();
     }
 
-    public Shop(String name, String description, String chainStore, String address, String city, String country, Long createdAt, Long updatedAt) {
+    public Shop(String name, String description, String chainStore, String address, String city,
+                String country, Long createdAt, Long updatedAt, boolean needsSync) {
         super();
         this.name = name;
         this.description = description;
@@ -50,5 +51,6 @@ public class Shop extends Model {
         this.country = country;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.needsSync = needsSync;
     }
 }

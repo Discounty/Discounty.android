@@ -42,7 +42,8 @@ public class Customer extends Model {
         super();
     }
 
-    public Customer(String firstName, String lastName, String email, String phoneNumber, String city, String country, Long createdAt, Long updatedAt) {
+    public Customer(String firstName, String lastName, String email, String phoneNumber, String city,
+                    String country, Long createdAt, Long updatedAt, boolean needsSync) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -52,6 +53,7 @@ public class Customer extends Model {
         this.country = country;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.needsSync = needsSync;
     }
 
     public List<DiscountCard> discountCards() {
