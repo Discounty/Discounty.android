@@ -30,5 +30,7 @@
 
 -dontwarn java.lang.invoke.*
 
+-dontwarn com.squareup.okhttp.**
+
 -keep class com.mobsandgeeks.saripaar.** { *; }
 -keep @com.mobsandgeeks.saripaar.annotation.ValidateUsing class * { *; }

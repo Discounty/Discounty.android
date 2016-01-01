@@ -28,6 +28,9 @@ public class DiscountCard extends Model {
     @Column(name = "UpdatedAt")
     public Long updatedAt;
 
+    @Column(name = "ServerId")
+    public Integer serverId;
+
     @Column(name = "Customer")
     public Customer customer;
 
@@ -35,14 +38,15 @@ public class DiscountCard extends Model {
         super();
     }
 
-    public DiscountCard(String name, String description, Barcode barcode,
-                        Long createdAt, Long updatedAt, Customer customer, boolean needsSync) {
+    public DiscountCard(String name, String description, Barcode barcode, Long createdAt,
+                        Long updatedAt, Integer serverId, Customer customer, boolean needsSync) {
         super();
         this.name = name;
         this.description = description;
         this.barcode = barcode;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.serverId = serverId;
         this.customer = customer;
         this.needsSync = needsSync;
     }

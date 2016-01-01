@@ -30,6 +30,9 @@ public class Shop extends Model {
     @Column(name = "Country")
     public String country;
 
+    @Column(name = "ServerId")
+    public Integer serverId;
+
     @Column(name = "CreatedAt")
     public Long createdAt;
 
@@ -41,7 +44,7 @@ public class Shop extends Model {
     }
 
     public Shop(String name, String description, String chainStore, String address, String city,
-                String country, Long createdAt, Long updatedAt, boolean needsSync) {
+                String country, Integer serverId, Long createdAt, Long updatedAt, boolean needsSync) {
         super();
         this.name = name;
         this.description = description;
@@ -49,6 +52,7 @@ public class Shop extends Model {
         this.address = address;
         this.city = city;
         this.country = country;
+        this.serverId = serverId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.needsSync = needsSync;

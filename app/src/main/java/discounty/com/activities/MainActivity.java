@@ -6,6 +6,7 @@ import android.accounts.AuthenticatorException;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,12 +21,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import discounty.com.R;
 import discounty.com.authenticator.AccountGeneral;
+import discounty.com.helpers.BitmapHelper;
+import fr.tkeunebr.gravatar.Gravatar;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -75,6 +86,61 @@ public class MainActivity extends AppCompatActivity
 //                intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
             startActivityForResult(intent, 0);
         });
+
+
+//        String gravatarUrl = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
+//                .size(BitmapHelper.dpToPx(108, getApplicationContext())).build();
+//        Bitmap avatar = null;
+//        try {
+//            avatar = Picasso.with(getApplicationContext()).load(gravatarUrl).get();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        final CircleImageView imgAvatar = (CircleImageView) findViewById(R.id.img_avatar);
+        Log.d("EMAIL URL", accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name);
+//        imgAvatar.setImageBitmap(BitmapHelper.getCircleBitmap(avatar));
+
+        try {
+            Observable<Bitmap> observable = Observable.create(new Observable.OnSubscribe<Bitmap>() {
+
+                @Override
+                public void call(Subscriber<? super Bitmap> subscriber) {
+                    try {
+                        String gravatarUrl = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
+                                .size(BitmapHelper.dpToPx(90, getApplicationContext())).build();
+                        Log.wtf("GRAVATAR", gravatarUrl);
+                        subscriber.onNext(Picasso.with(getApplicationContext()).load(gravatarUrl).get());
+                        subscriber.onCompleted();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            Subscriber<Bitmap> subscriber = new Subscriber<Bitmap>() {
+                @Override
+                public void onCompleted() {
+                   Log.d("BITMAP SUBSCRIBER", "SUCCESS");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onNext(Bitmap bitmap) {
+                    imgAvatar.setImageBitmap(BitmapHelper.getCircleBitmap(bitmap));
+                }
+            };
+
+            observable.subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
 //        DiscountyService discountyService = ServiceGenerator.createService(DiscountyService.class);
 //
@@ -227,11 +293,11 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_ads) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_notifications) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_send) {
 

@@ -9,12 +9,14 @@ import com.activeandroid.annotation.Table;
 @Table(name = "Coupons", id = BaseColumns._ID)
 public class Coupon extends Model {
 
-
     @Column(name = "Name")
     public String name;
 
     @Column(name = "Description")
     public String description;
+
+    @Column(name = "ServerId")
+    public Integer serverId;
 
     @Column(name = "needsSync")
     public boolean needsSync;
@@ -35,10 +37,12 @@ public class Coupon extends Model {
         super();
     }
 
-    public Coupon(String description, Long createdAt, Long updatedAt, Barcode barcode,
-                  Customer customer, boolean needsSync) {
+    public Coupon(String name, String description, Integer serverId, Long createdAt,
+                  Long updatedAt, Barcode barcode, Customer customer, boolean needsSync) {
         super();
+        this.name = name;
         this.description = description;
+        this.serverId = serverId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.barcode = barcode;

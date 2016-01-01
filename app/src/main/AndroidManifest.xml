@@ -29,7 +29,7 @@
         android:theme="@style/AppTheme">
 
         <meta-data android:name="AA_DB_NAME" android:value="Discounty.db" />
-        <meta-data android:name="AA_DB_VERSION" android:value="2" />
+        <meta-data android:name="AA_DB_VERSION" android:value="3" />
         <meta-data android:name="AA_MODELS"
             android:value="com.discounty.data.models.Barcode, com.discounty.data.models.BarcodeType, com.discounty.data.models.Coupon, com.discounty.data.models.Customer, com.discounty.data.models.DiscountCard, com.discounty.data.models.Feedback, com.discounty.data.models.Shop" />
 

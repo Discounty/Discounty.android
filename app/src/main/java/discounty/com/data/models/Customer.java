@@ -32,6 +32,9 @@ public class Customer extends Model {
     @Column(name = "Country")
     public String country;
 
+    @Column(name = "ServerId")
+    public Integer serverId;
+
     @Column(name = "CreatedAt")
     public Long createdAt;
 
@@ -43,7 +46,7 @@ public class Customer extends Model {
     }
 
     public Customer(String firstName, String lastName, String email, String phoneNumber, String city,
-                    String country, Long createdAt, Long updatedAt, boolean needsSync) {
+                    String country, Long createdAt, Long updatedAt, Integer serverId, boolean needsSync) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -53,6 +56,7 @@ public class Customer extends Model {
         this.country = country;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.serverId = serverId;
         this.needsSync = needsSync;
     }
 

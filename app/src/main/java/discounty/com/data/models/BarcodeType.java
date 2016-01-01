@@ -15,6 +15,9 @@ public class BarcodeType extends Model {
     @Column(name = "needsSync")
     public boolean needsSync;
 
+    @Column(name = "ServerId")
+    public Integer serverId;
+
     @Column(name = "CreatedAt")
     public Long createdAt;
 
@@ -25,9 +28,10 @@ public class BarcodeType extends Model {
         super();
     }
 
-    public BarcodeType(String barcodeType, Long createdAt, Long updatedAt, boolean needsSync) {
+    public BarcodeType(String barcodeType, Integer serverId, Long createdAt, Long updatedAt, boolean needsSync) {
         super();
         this.barcodeType = barcodeType;
+        this.serverId = serverId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.needsSync = needsSync;

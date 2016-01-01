@@ -33,12 +33,15 @@ public class Barcode extends Model {
     @Column(name = "Customer", onDelete = Column.ForeignKeyAction.CASCADE)
     public Customer customer;
 
+    @Column(name = "ServerId")
+    public Integer serverId;
+
     public Barcode() {
         super();
     }
 
     public Barcode(String barcode, Double discountPercentage, String extraInfo, Long createdAt, Long updatedAt,
-                   BarcodeType barcodeType, Customer customer, boolean needsSync) {
+                   BarcodeType barcodeType, Customer customer, Integer serverId, boolean needsSync) {
         super();
         this.barcode = barcode;
         this.discountPercentage = discountPercentage;
@@ -47,6 +50,7 @@ public class Barcode extends Model {
         this.updatedAt = updatedAt;
         this.barcodeType = barcodeType;
         this.customer = customer;
+        this.serverId = serverId;
         this.needsSync = needsSync;
     }
 }

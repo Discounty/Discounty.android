@@ -43,6 +43,7 @@ import discounty.com.api.ServiceGenerator;
 import discounty.com.authenticator.AccountGeneral;
 import discounty.com.interfaces.DiscountyService;
 import discounty.com.models.AccessToken;
+import fr.tkeunebr.gravatar.Gravatar;
 
 import static android.Manifest.permission.READ_CONTACTS;
 

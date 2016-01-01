@@ -10,7 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:background="@color/white">
 
     <Button
         android:layout_width="wrap_content"
@@ -19,5 +20,8 @@
         android:id="@+id/button"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="172dp" />
+        android:layout_marginTop="172dp"
+        android:background="@color/colorPrimary"
+        android:padding="10dp"
+        android:textColor="@color/white"/>
 </RelativeLayout>
