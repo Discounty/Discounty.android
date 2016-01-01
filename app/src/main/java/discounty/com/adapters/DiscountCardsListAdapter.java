@@ -1,6 +1,7 @@
 package discounty.com.adapters;
 
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import discounty.com.R;
 import discounty.com.data.models.DiscountCard;
+import discounty.com.helpers.Colorize;
 
 public class DiscountCardsListAdapter extends RecyclerView.Adapter<DiscountCardsListAdapter.ViewHolder> {
 
@@ -53,9 +55,11 @@ public class DiscountCardsListAdapter extends RecyclerView.Adapter<DiscountCards
 
 
             // Set round circle icons
-            RandomColor randomColor = new RandomColor();
+//            RandomColor randomColor = new RandomColor();
+//            ((ImageView) itemView.findViewById(R.id.discount_card_item_image))
+//                    .setImageDrawable(TextDrawable.builder().buildRound("A", randomColor.randomColor()));
             ((ImageView) itemView.findViewById(R.id.discount_card_item_image))
-                    .setImageDrawable(TextDrawable.builder().buildRound("A", randomColor.randomColor()));
+                    .setImageDrawable(TextDrawable.builder().buildRound("A", Color.parseColor(Colorize.get())));
         }
     }
 }
