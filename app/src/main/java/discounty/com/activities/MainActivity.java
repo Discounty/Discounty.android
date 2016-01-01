@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,21 +17,34 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.style.TtsSpan;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import discounty.com.R;
+import discounty.com.adapters.DiscountCardsListAdapter;
 import discounty.com.authenticator.AccountGeneral;
+import discounty.com.data.models.DiscountCard;
 import discounty.com.helpers.BitmapHelper;
 import fr.tkeunebr.gravatar.Gravatar;
 import rx.Observable;
@@ -53,10 +67,18 @@ public class MainActivity extends AppCompatActivity
 
     private boolean invalidate;
 
+    @Bind(R.id.cards_recycler_view)
+    UltimateRecyclerView cardsRecyclerView;
+
+    private RecyclerView.LayoutManager layoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
+
         accountManager = AccountManager.get(this);
 
         if (accountManager.getAccountsByType("com.discounty").length == 0) {
@@ -80,12 +102,14 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        initDiscountCardsRecyclerView();
 
-        findViewById(R.id.button).setOnClickListener(view -> {
-            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-//                intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
-            startActivityForResult(intent, 0);
-        });
+
+//        findViewById(R.id.button).setOnClickListener(view -> {
+//            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+////                intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
+//            startActivityForResult(intent, 0);
+//        });
 
 
 //        String gravatarUrl = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
@@ -306,5 +330,28 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void initDiscountCardsRecyclerView() {
+        cardsRecyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        cardsRecyclerView.setLayoutManager(layoutManager);
+
+        List<DiscountCard> records = new ArrayList<>();
+        records.add(null);
+        records.add(null);
+        records.add(null);
+        records.add(null);
+        records.add(null);
+        records.add(null);
+        records.add(null);
+        records.add(null);
+        records.add(null);
+
+        DiscountCardsListAdapter adapter = new DiscountCardsListAdapter(records);
+
+        cardsRecyclerView.setAdapter(adapter);
+        cardsRecyclerView.setItemAnimator(cardsRecyclerView.getItemAnimator());
     }
 }

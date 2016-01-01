@@ -26,6 +26,9 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 retrolambda {
@@ -64,4 +67,8 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     // RecyclerView
     compile 'com.marshalchen.ultimaterecyclerview:library:0.3.18'
+    // TextDrawable
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    // Random colors
+    compile 'com.github.lzyzsd.randomcolor:library:1.0.0'
 }
