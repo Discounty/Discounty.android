@@ -10,12 +10,17 @@
     tools:showIn="@layout/app_bar_main"
     android:background="@color/white">
 
-    <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
-        android:id="@+id/cards_recycler_view"
+    <!--<com.marshalchen.ultimaterecyclerview.UltimateRecyclerView-->
+        <!--android:id="@+id/cards_recycler_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:recyclerviewEmptyView="@layout/empty_discount_cards_list"-->
+        <!--android:scrollbars="vertical" />-->
+
+    <FrameLayout
+        android:id="@+id/frame_layout_main_activity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:recyclerviewEmptyView="@layout/empty_discount_cards_list"
-        android:scrollbars="vertical" />
+        android:layout_height="match_parent" />
 
     <!--<Button-->
         <!--android:layout_width="wrap_content"-->
