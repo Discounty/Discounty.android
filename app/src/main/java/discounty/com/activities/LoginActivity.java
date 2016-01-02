@@ -28,22 +28,41 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import discounty.com.R;
 import discounty.com.api.ServiceGenerator;
 import discounty.com.authenticator.AccountGeneral;
+import discounty.com.data.models.Barcode;
+import discounty.com.data.models.BarcodeType;
+import discounty.com.data.models.Coupon;
+import discounty.com.data.models.DiscountCard;
+import discounty.com.data.models.Feedback;
+import discounty.com.data.models.Shop;
 import discounty.com.interfaces.DiscountyService;
 import discounty.com.models.AccessToken;
-import fr.tkeunebr.gravatar.Gravatar;
+import discounty.com.models.CardBarcode;
+import discounty.com.models.CardBarcodeType;
+import discounty.com.models.Customer;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -84,28 +103,21 @@ public class LoginActivity extends AccountAuthenticatorActivity
     private final int REQ_SIGNUP = 1;
 
     private final String TAG = this.getClass().getSimpleName();
-
-    private Validator validator;
-
     // UI references.
     @NotEmpty
     @Email
     @Bind(R.id.input_email)
     EditText mEmailInput;
-
     @NotEmpty
     @Bind(R.id.input_password)
     EditText mPasswordInput;
-
     @Bind(R.id.login_progress)
     View mProgressView;
-
     @Bind(R.id.login_form)
     View mLoginFormView;
-
     @Bind(R.id.btn_login)
     Button btnLogin;
-
+    private Validator validator;
     private AccountManager accountManager;
 
     private String authTokenType;
@@ -153,7 +165,7 @@ public class LoginActivity extends AccountAuthenticatorActivity
 //        Button mEmailSignInButton = (Button) findViewById(R.id.btn_login);
 //        mEmailSignInButton.setOnClickListener(view -> submit());
 
-        btnLogin.setOnClickListener(v -> validator.validate(true) );
+        btnLogin.setOnClickListener(v -> validator.validate(true));
 
         TextView mSignup = (TextView) findViewById(R.id.btn_signup);
         mSignup.setOnClickListener(v -> {
@@ -220,6 +232,8 @@ public class LoginActivity extends AccountAuthenticatorActivity
                 Bundle data = new Bundle();
 
                 try {
+//                    if (NetworkHelper.isInternetAvailable(getBaseContext())) {
+
                     AccessToken accessToken = discountyService.getAccessToken(DiscountyService.ACCESS_GRANT_TYPE,
                             username, password).toBlocking().first();
                     authtoken = accessToken.getAccessToken();
@@ -230,6 +244,7 @@ public class LoginActivity extends AccountAuthenticatorActivity
                     data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
                     data.putString(PARAM_USER_PASS, password);
                     data.putString(KEY_REFRESH_TOKEN, refreshtoken);
+//                    }
                 } catch (Exception e) {
                     data.putString(KEY_ERROR_MESSAGE, e.getMessage());
                 }
@@ -267,12 +282,153 @@ public class LoginActivity extends AccountAuthenticatorActivity
 
             accountManager.addAccountExplicitly(account, accountPassword, userData);
             accountManager.setAuthToken(account, authtokenType, authtoken);
+
+
+
+            try {
+
+                Observable.create(new Observable.OnSubscribe<Customer>() {
+                    @Override
+                    public void call(Subscriber<? super Customer> subscriber) {
+                        try {
+                            Customer customer = discountyService.getFullCustomerInfo(authtoken).toBlocking().first();
+
+                            subscriber.onNext(customer);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.d("CUSTOMER FAILURE", null);
+                        }
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Customer>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("CUSTOMER onCompleted", "SUCCESS");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(Customer customer) {
+
+                        Log.d("CUSTOMER SUCCESS", "START SAVING CUSTOMER");
+
+                        saveCustomerToDb(customer);
+
+                        Log.d("CUSTOMER SUCCESS", "CUSTOMER HAS BEEN SAVED");
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
         } else {
             accountManager.setPassword(account, accountPassword);
         }
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    private void saveCustomerToDb(Customer customer) {
+        try {
+            // Clear the DB
+            new Delete().from(Barcode.class).where("_id > ?", -1).execute();
+            new Delete().from(BarcodeType.class).where("_id > ?", -1).execute();
+            new Delete().from(Coupon.class).where("_id > ?", -1).execute();
+            new Delete().from(discounty.com.data.models.Customer.class).where("_id > ?", -1).execute();
+            new Delete().from(Feedback.class).where("_id > ?", -1).execute();
+            new Delete().from(Shop.class).where("_id > ?", -1).execute();
+
+            Log.d("saveCustomerToDb()", "FINISH CLEARING THE DB");
+
+            discounty.com.data.models.Customer customerAA = new discounty.com.data.models.Customer();
+
+//            List<discounty.com.models.DiscountCard> discountCards = new ArrayList<>();
+
+            // Customer general info
+            customerAA.serverId = customer.getId();
+            customerAA.firstName = customer.getFirstName();
+            customerAA.lastName = customer.getLastName();
+            customerAA.email = customer.getEmail();
+            customerAA.needsSync = false;
+            customerAA.phoneNumber = customer.getPhoneNumber();
+            customerAA.city = customer.getCity();
+            customerAA.country = customer.getCountry();
+            customerAA.createdAt = convertDateStringToLong(customer.getCreatedAt());
+            customerAA.updatedAt = convertDateStringToLong(customer.getUpdatedAt());
+            customerAA.save();
+
+            ActiveAndroid.beginTransaction();
+            try {
+                for (discounty.com.models.DiscountCard card : customer.getDiscountCards()) {
+
+                    Barcode barcodeAA = new Barcode();
+                    BarcodeType barcodeTypeAA = new BarcodeType();
+                    CardBarcode barcode = card.getBarcode();
+                    CardBarcodeType barcodeType = barcode.getBarcodeType();
+
+                    // BarcodeType
+                    // TODO save only unique types
+                    barcodeTypeAA.barcodeType = barcodeType.getBarcodeType();
+                    barcodeTypeAA.needsSync = false;
+                    barcodeTypeAA.serverId = barcodeType.getId();
+                    barcodeTypeAA.createdAt = convertDateStringToLong(barcodeType.getCreatedAt());
+                    barcodeTypeAA.updatedAt = convertDateStringToLong(barcodeType.getUpdatedAt());
+                    barcodeTypeAA.save();
+
+                    // Barcode
+                    barcodeAA.barcode = barcode.getBarcode();
+                    barcodeAA.needsSync = false;
+                    barcodeAA.discountPercentage = Double.parseDouble(barcode.getDiscountPercentage());
+                    barcodeAA.extraInfo = barcode.getExtraInfo();
+                    barcodeAA.createdAt = convertDateStringToLong(barcode.getCreatedAt());
+                    barcodeAA.updatedAt = convertDateStringToLong(barcode.getUpdatedAt());
+                    barcodeAA.serverId = barcode.getId();
+                    barcodeAA.barcodeType = barcodeTypeAA;
+                    barcodeAA.customer = customerAA;
+                    barcodeAA.save();
+
+                    // DiscountCard
+                    new DiscountCard(card.getName(), card.getDescription(), barcodeAA,
+                            convertDateStringToLong(card.getCreatedAt()),
+                            convertDateStringToLong(card.getUpdatedAt()),
+                            card.getId(), customerAA, false)
+                            .save();
+                }
+                ActiveAndroid.setTransactionSuccessful();
+            } finally {
+                ActiveAndroid.endTransaction();
+                customerAA.save();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Long convertDateStringToLong(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        try {
+            return format.parse(date).getTime();
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    private String convertDateLongToString(Long date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+        Date dateObj = new Date(date);
+        return format.format(dateObj);
     }
 
     private void populateAutoComplete() {

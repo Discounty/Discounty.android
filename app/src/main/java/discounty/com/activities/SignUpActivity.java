@@ -1,6 +1,7 @@
 package discounty.com.activities;
 
 import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import discounty.com.R;
 import discounty.com.api.ServiceGenerator;
+import discounty.com.authenticator.AccountGeneral;
 import discounty.com.interfaces.DiscountyService;
 import discounty.com.models.AccessToken;
 import discounty.com.models.Customer;
@@ -153,6 +155,7 @@ public class SignUpActivity extends AppCompatActivity implements Validator.Valid
                         Log.wtf("SignUpActivity", e.getMessage());
                         e.printStackTrace();
                     }
+
 
                     data.putString(AccountManager.KEY_ACCOUNT_NAME, email);
                     data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);

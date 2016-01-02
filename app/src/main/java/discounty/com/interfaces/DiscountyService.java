@@ -19,11 +19,12 @@ public interface DiscountyService {
 
     String REFRESH_GRANT_TYPE = "refresh_token";
 
-    @POST("/api/v1/customers/full_info")
-    Observable<Customer> getFullCustomerInfo();
+    @GET("/api/v1/customers/full_info")
+    Observable<Customer> getFullCustomerInfo(@Query("access_token") String accessToken);
 
     @PUT("/api/v1/customers/update")
-    Observable<Customer> updateCustomer(@Query("first_name") String firstName,
+    Observable<Customer> updateCustomer(@Query("access_token") String accessToken,
+                                        @Query("first_name") String firstName,
                                         @Query("last_name") String lastName,
                                         @Query("country") String country,
                                         @Query("city") String city,
@@ -37,10 +38,12 @@ public interface DiscountyService {
                                         @Query("last_name") String lastName);
 
     @GET("/api/v1/discount_cards/{id}")
-    Observable<DiscountCard> getDiscountCardById(@Path("id") int id);
+    Observable<DiscountCard> getDiscountCardById(@Path("id") int id,
+                                                 @Query("access_token") String accessToken);
 
     @PUT("/api/v1/discount_cards/{id}")
-    Observable<DiscountCard> updateDiscountCardById(@Path("id") int id,
+    Observable<DiscountCard> updateDiscountCardById(@Query("access_token") String accessToken,
+                                                    @Path("id") int id,
                                                     @Query("name") String name,
                                                     @Query("description") String description,
                                                     @Query("shop") String shop,
@@ -50,10 +53,12 @@ public interface DiscountyService {
                                                     @Query("barcode_type") String barcodeType);
 
     @DELETE("/api/v1/discount_cards/{id}")
-    Observable<DiscountCard> deleteDiscountCardById(@Path("id") int id);
+    Observable<DiscountCard> deleteDiscountCardById(@Path("id") int id,
+                                                    @Query("access_token") String accessToken);
 
     @POST("/api/v1/discount_cards/new")
-    Observable<DiscountCard> createDiscountCard(@Query("name") String name,
+    Observable<DiscountCard> createDiscountCard(@Query("access_token") String accessToken,
+                                                @Query("name") String name,
                                                 @Query("description") String description,
                                                 @Query("barcode_type") String barcodeType,
                                                 @Query("barcode") String barcode,

@@ -3,6 +3,7 @@ package discounty.com.helpers;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,7 +11,10 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Base64;
 import android.util.DisplayMetrics;
+
+import java.io.ByteArrayOutputStream;
 
 public class BitmapHelper {
 
@@ -39,13 +43,23 @@ public class BitmapHelper {
 
     public static int dpToPx(int dp, Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-        return px;
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     public static int pxToDp(int px, Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-        return dp;
+        return Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    public static String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        byte[] byteArr = bytes.toByteArray();
+        return Base64.encodeToString(byteArr, Base64.DEFAULT);
+    }
+
+    public static Bitmap base64ToBitmap(String base64) {
+        byte[] byteArr = Base64.decode(base64, 0);
+        return BitmapFactory.decodeByteArray(byteArr, 0, byteArr.length);
     }
 }

@@ -1,5 +1,6 @@
 package discounty.com.models;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /*
@@ -11,16 +12,34 @@ import com.google.gson.annotations.SerializedName;
 public class CardBarcodeType {
 
     @SerializedName("id")
+    @Expose
     private Integer id;
 
     @SerializedName("barcode_type")
+    @Expose
     private String barcodeType;
 
     @SerializedName("created_at")
+    @Expose
     private String createdAt;
 
     @SerializedName("updated_at")
+    @Expose
     private String updatedAt;
+
+    @SerializedName("barcode__id")
+    @Expose
+    private Object barcodeId;
+
+
+
+    public Object getBarcodeId() {
+        return barcodeId;
+    }
+
+    public void setBarcodeId(Object barcodeId) {
+        this.barcodeId = barcodeId;
+    }
 
     public Integer getId() {
         return id;
@@ -61,6 +80,7 @@ public class CardBarcodeType {
                 ", barcodeType='" + barcodeType + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
+                ", barcodeId='" + barcodeId + '\'' +
                 '}';
     }
 }

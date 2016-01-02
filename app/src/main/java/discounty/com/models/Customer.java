@@ -1,7 +1,9 @@
 package discounty.com.models;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -13,43 +15,53 @@ import java.util.List;
 public class Customer {
 
     @SerializedName("id")
+    @Expose
     private Integer id;
 
     @SerializedName("first_name")
+    @Expose
     private String firstName;
 
     @SerializedName("last_name")
+    @Expose
     private String lastName;
 
     @SerializedName("email")
+    @Expose
     private String email;
 
     @SerializedName("phone_number")
+    @Expose
     private String phoneNumber;
 
     @SerializedName("city")
+    @Expose
     private String city;
 
     @SerializedName("country")
+    @Expose
     private String country;
 
     @SerializedName("created_at")
+    @Expose
     private String createdAt;
 
     @SerializedName("updated_at")
+    @Expose
     private String updatedAt;
 
-    public List<CardBarcode> getBarcodes() {
-        return barcodes;
+    @SerializedName("discount_cards")
+    @Expose
+    private List<DiscountCard> discountCards = new ArrayList<>();
+
+
+    public List<DiscountCard> getDiscountCards() {
+        return discountCards;
     }
 
-    public void setBarcodes(List<CardBarcode> barcodes) {
-        this.barcodes = barcodes;
+    public void setDiscountCards(List<DiscountCard> discountCards) {
+        this.discountCards = discountCards;
     }
-
-    @SerializedName("barcodes")
-
-    private List<CardBarcode> barcodes;
 
     public Integer getId() {
         return id;
@@ -135,7 +147,7 @@ public class Customer {
                 ", country='" + country + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
-                ", barcodes=" + barcodes +
+                ", discountCards=" + discountCards+
                 '}';
     }
 }

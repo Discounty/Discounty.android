@@ -8,7 +8,7 @@ import com.activeandroid.annotation.Table;
 
 @Table(name = "BarcodeTypes", id = BaseColumns._ID)
 public class BarcodeType extends Model {
-
+    // unique = true, onUniqueConflict = Column.ConflictAction.REPLACE
     @Column(name = "BarcodeType")
     public String barcodeType;
 

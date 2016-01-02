@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -40,6 +41,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import discounty.com.R;
 import discounty.com.authenticator.AccountGeneral;
+import discounty.com.data.models.Customer;
 import discounty.com.fragments.DiscountCardsFragment;
 import discounty.com.helpers.BitmapHelper;
 import fr.tkeunebr.gravatar.Gravatar;
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity
         final CircleImageView imgAvatar = (CircleImageView) navigationView.getHeaderView(0).findViewById(R.id.img_avatar);
         Account account = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0];
         ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_subheader)).setText(account.name);
-        // TODO setText first and last name of the user
+
 
         Log.d("EMAIL URL", account.name);
 
@@ -139,10 +141,18 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void call(Subscriber<? super Bitmap> subscriber) {
                     try {
+                        // Set customer's name
+                        Customer customer = new Select().from(Customer.class).executeSingle();
+                        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_header))
+                                .setText(customer.firstName + ' ' + customer.lastName);
+
+
                         String gravatarUrl = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
                                 .size(BitmapHelper.dpToPx(85, getApplicationContext())).build();
                         Log.wtf("GRAVATAR", gravatarUrl);
                         subscriber.onNext(Picasso.with(getApplicationContext()).load(gravatarUrl).get());
+
+
                         subscriber.onCompleted();
                     } catch (IOException e) {
                         e.printStackTrace();

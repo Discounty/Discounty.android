@@ -23,12 +23,18 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import discounty.com.activities.LoginActivity;
+import discounty.com.api.ServiceGenerator;
 import discounty.com.authenticator.AccountGeneral;
 import discounty.com.data.models.DiscountCard;
+import discounty.com.helpers.NetworkHelper;
+import discounty.com.interfaces.DiscountyService;
+import discounty.com.models.Customer;
 
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     ContentResolver contentResolver;
+
+    final DiscountyService discountyService = ServiceGenerator.createService(DiscountyService.class);
 
     Context context;
 
@@ -58,10 +64,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.i("onPerformSync", "pass:  " + password);
             Log.i("onPerformSync", "username:  " + account.name);
 
-            // Simulate network
+
             try {
-                Thread.sleep(TimeUnit.SECONDS.toMillis(3));
-            } catch (InterruptedException e) {
+                if (NetworkHelper.isNetworkConnected(context)) {
+                    Customer customer = getCustomerFullInfo(authToken);
+                } else {
+                    Log.d("ATTEMPT SYNC ERROR", "NO NETWORK CONNECTION");
+                }
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -82,6 +93,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         } catch (OperationCanceledException | IOException | AuthenticatorException e) {
             e.printStackTrace();
+        }
+    }
+
+    private Customer getCustomerFullInfo(String authToken) {
+        try {
+            Customer customer = discountyService.getFullCustomerInfo(authToken).toBlocking().first();
+
+            Log.d("CUSTOMER SUCCESS", customer.toString());
+
+            return customer;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("CUSTOMER FAILURE", null);
+            return null;
         }
     }
 }

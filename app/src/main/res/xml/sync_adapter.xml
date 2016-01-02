@@ -5,5 +5,5 @@
     android:accountType="com.discounty"
     android:userVisible="true"
     android:supportsUploading="true"
-    android:allowParallelSyncs="false"
+    android:allowParallelSyncs="true"
     android:isAlwaysSyncable="true" />
