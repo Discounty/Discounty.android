@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
@@ -23,7 +24,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -95,6 +98,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        navigationView.getHeaderView(0).setOnClickListener(view -> {
+            Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+//            Customer customer = new Select().from(Customer.class).executeSingle();
+//            profileIntent.putExtra("Customer", customer);
+            MainActivity.this.startActivity(profileIntent);
+        });
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> Snackbar.make(view, "Welcome to Discounty!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
@@ -136,10 +146,10 @@ public class MainActivity extends AppCompatActivity
         Log.d("EMAIL URL", account.name);
 
         try {
-            Observable<Bitmap> observable = Observable.create(new Observable.OnSubscribe<Bitmap>() {
+            Observable<Bitmap[]> observable = Observable.create(new Observable.OnSubscribe<Bitmap[]>() {
 
                 @Override
-                public void call(Subscriber<? super Bitmap> subscriber) {
+                public void call(Subscriber<? super Bitmap[]> subscriber) {
                     try {
                         // Set customer's name
                         Customer customer = new Select().from(Customer.class).executeSingle();
@@ -147,12 +157,31 @@ public class MainActivity extends AppCompatActivity
                                 .setText(customer.firstName + ' ' + customer.lastName);
 
 
-                        String gravatarUrl = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
+                        String gravatarUrlSmall = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
                                 .size(BitmapHelper.dpToPx(85, getApplicationContext())).build();
-                        Log.wtf("GRAVATAR", gravatarUrl);
-                        subscriber.onNext(Picasso.with(getApplicationContext()).load(gravatarUrl).get());
 
+                        DisplayMetrics metrics = new DisplayMetrics();
+                        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                        String gravatarUrlBig = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
+                                .size(metrics.widthPixels).build();
 
+                        Bitmap smallAvatar = Picasso.with(getApplicationContext()).load(gravatarUrlSmall).get();
+
+                        Bitmap bigAvatar = Picasso.with(getApplicationContext()).load(gravatarUrlBig).get();
+
+                        try {
+                            customer.avatarSmall = BitmapHelper.bitmapToBase64(smallAvatar.copy(smallAvatar.getConfig(), true));
+                            customer.avatarBig = BitmapHelper.bitmapToBase64(bigAvatar.copy(bigAvatar.getConfig(), true));
+                            customer.save();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        // result[0] - small avatar for nav drawer,
+                        // result[1] - big avatar for profile fragment.
+                        Bitmap[] result = new Bitmap[]{smallAvatar, bigAvatar};
+
+                        subscriber.onNext(result);
                         subscriber.onCompleted();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -160,7 +189,7 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
-            Subscriber<Bitmap> subscriber = new Subscriber<Bitmap>() {
+            Subscriber<Bitmap[]> subscriber = new Subscriber<Bitmap[]>() {
                 @Override
                 public void onCompleted() {
                     Log.d("BITMAP SUBSCRIBER", "SUCCESS");
@@ -172,8 +201,17 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 @Override
-                public void onNext(Bitmap bitmap) {
-                    imgAvatar.setImageBitmap(BitmapHelper.getCircleBitmap(bitmap));
+                public void onNext(Bitmap[] bitmaps) {
+                    imgAvatar.setImageBitmap(BitmapHelper.getCircleBitmap(bitmaps[0]));
+
+//                    try {
+//                        Customer customer = new Select().from(Customer.class).executeSingle();
+//                        customer.avatarSmall = BitmapHelper.bitmapToBase64(bitmaps[0].copy(bitmaps[0].getConfig(), true));
+//                        customer.avatarBig = BitmapHelper.bitmapToBase64(bitmaps[1].copy(bitmaps[1].getConfig(), true));
+//                        customer.save();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
                 }
             };
 

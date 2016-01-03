@@ -5,19 +5,16 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera2" />
 
     <application
@@ -27,10 +24,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <meta-data android:name="AA_DB_NAME" android:value="Discounty.db" />
-        <meta-data android:name="AA_DB_VERSION" android:value="1" />
-        <meta-data android:name="AA_MODELS"
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="Discounty.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="2" />
+        <meta-data
+            android:name="AA_MODELS"
             android:value="com.discounty.data.models.Barcode, com.discounty.data.models.BarcodeType, com.discounty.data.models.Coupon, com.discounty.data.models.Customer, com.discounty.data.models.DiscountCard, com.discounty.data.models.Feedback, com.discounty.data.models.Shop" />
 
         <activity
@@ -51,11 +52,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
-            android:name="discounty.com.google.zxing.client.android.CaptureActivity"
-            android:label="@string/app_name" >
+            android:name=".google.zxing.client.android.CaptureActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="com.google.zxing.client.android.SCAN" />
 
@@ -64,8 +63,8 @@
         </activity>
 
         <provider
-            android:authorities="com.discounty"
             android:name="com.activeandroid.content.ContentProvider"
+            android:authorities="com.discounty"
             android:exported="false"
             android:syncable="true" />
 
@@ -75,11 +74,11 @@
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-
         <service
             android:name=".sync.SyncService"
             android:exported="true"
@@ -87,11 +86,17 @@
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
+
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/sync_adapter" />
         </service>
 
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

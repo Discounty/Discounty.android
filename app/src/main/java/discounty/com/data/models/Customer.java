@@ -1,5 +1,7 @@
 package discounty.com.data.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.BaseColumns;
 
 import com.activeandroid.Model;
@@ -9,7 +11,7 @@ import com.activeandroid.annotation.Table;
 import java.util.List;
 
 @Table(name = "Customers", id = BaseColumns._ID)
-public class Customer extends Model {
+public class Customer extends Model implements Parcelable {
 
     @Column(name = "FirstName")
     public String firstName;
@@ -41,12 +43,19 @@ public class Customer extends Model {
     @Column(name = "UpdatedAt")
     public Long updatedAt;
 
+    @Column(name = "SmallAvatar")
+    public String avatarSmall;
+
+    @Column(name = "BigAvatar")
+    public String avatarBig;
+
     public Customer() {
         super();
     }
 
     public Customer(String firstName, String lastName, String email, String phoneNumber, String city,
-                    String country, Long createdAt, Long updatedAt, Integer serverId, boolean needsSync) {
+                    String country, Long createdAt, Long updatedAt, Integer serverId, boolean needsSync,
+                    String avatarSmall, String avatarBig) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -58,6 +67,8 @@ public class Customer extends Model {
         this.updatedAt = updatedAt;
         this.serverId = serverId;
         this.needsSync = needsSync;
+        this.avatarSmall = avatarSmall;
+        this.avatarBig = avatarBig;
     }
 
     public List<DiscountCard> discountCards() {
@@ -66,5 +77,48 @@ public class Customer extends Model {
 
     public List<Feedback> feedbacks() {
         return getMany(Feedback.class, "Customer");
+    }
+
+
+    protected Customer(Parcel in) {
+        firstName = in.readString();
+        lastName = in.readString();
+        needsSync = in.readByte() != 0;
+        email = in.readString();
+        phoneNumber = in.readString();
+        city = in.readString();
+        country = in.readString();
+        avatarSmall = in.readString();
+        avatarBig = in.readString();
+    }
+
+    public static final Creator<Customer> CREATOR = new Creator<Customer>() {
+        @Override
+        public Customer createFromParcel(Parcel in) {
+            return new Customer(in);
+        }
+
+        @Override
+        public Customer[] newArray(int size) {
+            return new Customer[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(firstName);
+        parcel.writeString(lastName);
+        parcel.writeByte((byte) (needsSync ? 1 : 0));
+        parcel.writeString(email);
+        parcel.writeString(phoneNumber);
+        parcel.writeString(city);
+        parcel.writeString(country);
+        parcel.writeString(avatarSmall);
+        parcel.writeString(avatarBig);
     }
 }
