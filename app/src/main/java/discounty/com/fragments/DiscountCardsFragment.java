@@ -3,14 +3,21 @@ package discounty.com.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.activeandroid.query.Select;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
+import com.marshalchen.ultimaterecyclerview.animators.FadeInAnimator;
+import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
+import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +26,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import discounty.com.R;
 import discounty.com.adapters.DiscountCardsListAdapter;
+import discounty.com.data.models.Customer;
 import discounty.com.data.models.DiscountCard;
 
 /**
@@ -127,21 +135,29 @@ public class DiscountCardsFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         cardsRecyclerView.setLayoutManager(layoutManager);
 
-        List<DiscountCard> records = new ArrayList<>();
-        records.add(null);
-        records.add(null);
-        records.add(null);
-        records.add(null);
-        records.add(null);
-        records.add(null);
-        records.add(null);
-        records.add(null);
-        records.add(null);
+        Customer customer = new Select().from(Customer.class).executeSingle();
+        List<DiscountCard> records = customer.discountCards();
+        records.addAll(records);
+        records.addAll(records);
 
         DiscountCardsListAdapter adapter = new DiscountCardsListAdapter(records);
 
         cardsRecyclerView.setAdapter(adapter);
         cardsRecyclerView.setItemAnimator(cardsRecyclerView.getItemAnimator());
+
+        cardsRecyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getContext()).build());
+
+        cardsRecyclerView.setItemAnimator(new FadeInAnimator());
+        cardsRecyclerView.getItemAnimator().setRemoveDuration(1000);
+
+        cardsRecyclerView.setDefaultOnRefreshListener(() -> new Handler().postDelayed(() -> {
+            // insert things to adapter
+            cardsRecyclerView.setRefreshing(false);
+            layoutManager.scrollToPosition(0);
+        }, 1000));
+
+
+
     }
 
     /**

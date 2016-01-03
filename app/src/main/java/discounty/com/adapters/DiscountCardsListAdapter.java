@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.github.lzyzsd.randomcolor.RandomColor;
+import com.marshalchen.ultimaterecyclerview.dragsortadapter.DragSortAdapter;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import discounty.com.R;
 import discounty.com.data.models.DiscountCard;
 import discounty.com.helpers.Colorize;
@@ -27,7 +30,6 @@ public class DiscountCardsListAdapter extends RecyclerView.Adapter<DiscountCards
         this.records = records;
     }
 
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.discount_card_list_item, viewGroup, false);
@@ -38,7 +40,17 @@ public class DiscountCardsListAdapter extends RecyclerView.Adapter<DiscountCards
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         DiscountCard card = records.get(i);
-//        viewHolder.name.setText(card.name);
+        viewHolder.cardTitleTxt.setText(card.name);
+
+        viewHolder.cardImg.setImageDrawable(TextDrawable.builder()
+                .buildRound(card.name.substring(0, 1).toUpperCase(),
+                        Color.parseColor(Colorize.get())));
+
+        String desc = card.description;
+        if (desc.length() > 40) {
+            desc = desc.substring(0, 40) + " ...";
+        }
+        viewHolder.cardDescriptionTxt.setText(desc);
     }
 
     @Override
@@ -48,18 +60,18 @@ public class DiscountCardsListAdapter extends RecyclerView.Adapter<DiscountCards
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private Drawable drawable;
+        @Bind(R.id.discount_card_item_image)
+        ImageView cardImg;
+
+        @Bind(R.id.card_title)
+        TextView cardTitleTxt;
+
+        @Bind(R.id.card_description)
+        TextView cardDescriptionTxt;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-
-            // Set round circle icons
-//            RandomColor randomColor = new RandomColor();
-//            ((ImageView) itemView.findViewById(R.id.discount_card_item_image))
-//                    .setImageDrawable(TextDrawable.builder().buildRound("A", randomColor.randomColor()));
-            ((ImageView) itemView.findViewById(R.id.discount_card_item_image))
-                    .setImageDrawable(TextDrawable.builder().buildRound("A", Color.parseColor(Colorize.get())));
+            ButterKnife.bind(this, itemView);
         }
     }
 }
