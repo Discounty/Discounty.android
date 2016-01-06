@@ -96,7 +96,8 @@
                         android:text="Discount cards\n0"
                         android:layout_marginEnd="30dp"
                         android:textSize="20sp"
-                        android:textColor="@color/jet"/>
+                        android:textColor="@color/jet"
+                        android:lineSpacingMultiplier="1.4"/>
 
                     <TextView
                         android:id="@+id/coupons_count_txt"
@@ -106,7 +107,8 @@
                         android:text="Coupons\n0"
                         android:layout_marginStart="30dp"
                         android:textSize="20sp"
-                        android:textColor="@color/jet"/>
+                        android:textColor="@color/jet"
+                        android:lineSpacingMultiplier="1.4"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -143,7 +145,7 @@
                             android:layout_marginStart="25dp"
                             android:padding="25dp"
                             android:textSize="15sp"
-                            android:layout_marginTop="220dp"
+                            android:layout_marginTop="230dp"
                             android:textColor="@color/jet" />
 
 
@@ -223,10 +225,12 @@
                             android:layout_marginStart="25dp"
                             android:padding="25dp"
                             android:textSize="15sp"
-                            android:layout_marginTop="220dp"
+                            android:layout_marginTop="230dp"
                             android:textColor="@color/jet"
                             android:inputType="textPersonName"
-                            android:layout_marginEnd="20dp"/>
+                            android:layout_marginEnd="20dp"
+                            android:cursorVisible="true"
+                            android:textCursorDrawable="@null"/>
 
 
                         <EditText
@@ -241,7 +245,9 @@
                             android:textSize="15sp"
                             android:textColor="@color/jet"
                             android:inputType="textPersonName"
-                            android:layout_marginEnd="20dp"/>
+                            android:layout_marginEnd="20dp"
+                            android:cursorVisible="true"
+                            android:textCursorDrawable="@null"/>
 
                         <!--<View-->
                             <!--android:layout_width="match_parent"-->
@@ -261,7 +267,9 @@
                             android:textSize="15sp"
                             android:textColor="@color/jet"
                             android:inputType="text"
-                            android:layout_marginEnd="20dp"/>
+                            android:layout_marginEnd="20dp"
+                            android:cursorVisible="true"
+                            android:textCursorDrawable="@null"/>
 
 
                         <EditText
@@ -276,7 +284,9 @@
                             android:textSize="15sp"
                             android:textColor="@color/jet"
                             android:inputType="text"
-                            android:layout_marginEnd="20dp"/>
+                            android:layout_marginEnd="20dp"
+                            android:cursorVisible="true"
+                            android:textCursorDrawable="@null"/>
 
                         <!--<View-->
                             <!--android:layout_width="match_parent"-->
@@ -296,7 +306,9 @@
                             android:textSize="15sp"
                             android:textColor="@color/jet"
                             android:inputType="phone"
-                            android:layout_marginEnd="20dp" />
+                            android:layout_marginEnd="20dp"
+                            android:cursorVisible="true"
+                            android:textCursorDrawable="@null"/>
 
                     </RelativeLayout>
                 </ViewSwitcher>
@@ -320,12 +332,15 @@
             fab:fab_addButtonColorNormal="@color/colorAccent"
             fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
             fab:fab_labelsPosition="left"
-            fab:fab_labelStyle="@style/menu_labels_style">
+            fab:fab_labelStyle="@style/menu_labels_style"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="2dp">
 
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_update_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:tint="@color/white"
                 fab:fab_title="Change photo"
                 fab:fab_icon="@drawable/ic_mode_edit_black_24dp"
                 fab:fab_colorNormal="@color/colorAccent"
@@ -339,6 +354,7 @@
                 android:id="@+id/fab_update_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:tint="@color/white"
                 fab:fab_title="Edit info"
                 fab:fab_icon="@drawable/ic_mode_edit_black_24dp"
                 fab:fab_colorNormal="@color/colorAccent"
@@ -356,12 +372,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
+            android:tint="@color/white"
             fab:fab_colorNormal="@color/colorAccent"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_addButtonColorNormal="@color/colorAccent"
             fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
             fab:fab_icon="@drawable/ic_done_black_24dp"
-            fab:fab_plusIconColor="@color/white"/>
+            fab:fab_plusIconColor="@color/white"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="2dp"/>
     </ViewSwitcher>
 
 </FrameLayout>

@@ -1,12 +1,12 @@
 package discounty.com.fragments;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -28,8 +28,6 @@ import com.activeandroid.query.Select;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-
-import org.w3c.dom.Text;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -227,6 +225,20 @@ public class ProfileFragment extends Fragment {
 
         initCardsAndCouponsTextViews();
 
+        view.setOnTouchListener((view1, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                if (fabMenu.isExpanded()) {
+                    Rect rect = new Rect();
+                    fabMenu.getGlobalVisibleRect(rect);
+
+                    if(!rect.contains((int)motionEvent.getRawX(), (int)motionEvent.getRawY())) {
+                        fabMenu.collapse();
+                    }
+                }
+            }
+            return true;
+        });
+
         return view;
     }
 
@@ -324,6 +336,8 @@ public class ProfileFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
+
 
     @Override
     public void onDetach() {
