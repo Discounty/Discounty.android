@@ -25,7 +25,7 @@
         <menu>
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_feedback_black_24dp"
                 android:title="Send feedback" />
         </menu>
     </item>

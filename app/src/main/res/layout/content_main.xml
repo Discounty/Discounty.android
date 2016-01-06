@@ -10,27 +10,8 @@
     tools:showIn="@layout/app_bar_main"
     android:background="@color/white">
 
-    <!--<com.marshalchen.ultimaterecyclerview.UltimateRecyclerView-->
-        <!--android:id="@+id/cards_recycler_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--app:recyclerviewEmptyView="@layout/empty_discount_cards_list"-->
-        <!--android:scrollbars="vertical" />-->
-
     <FrameLayout
         android:id="@+id/frame_layout_main_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Start Scanner"-->
-        <!--android:id="@+id/button"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginTop="172dp"-->
-        <!--android:background="@color/colorPrimary"-->
-        <!--android:padding="10dp"-->
-        <!--android:textColor="@color/white"/>-->
 </RelativeLayout>

@@ -92,11 +92,6 @@
                 android:resource="@xml/sync_adapter" />
         </service>
 
-        <activity
-            android:name=".activities.ProfileActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_profile"
-            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

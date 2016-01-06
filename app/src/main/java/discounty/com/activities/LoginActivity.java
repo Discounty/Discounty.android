@@ -342,10 +342,10 @@ public class LoginActivity extends AccountAuthenticatorActivity
     private void saveCustomerToDb(Customer customer) {
         try {
             // Clear the DB
-            new Delete().from(BarcodeType.class).where("_id > ?", -1).execute();
             new Delete().from(discounty.com.data.models.Customer.class).where("_id > ?", -1).execute();
             new Delete().from(Coupon.class).where("_id > ?", -1).execute();
             new Delete().from(Barcode.class).where("_id > ?", -1).execute();
+            new Delete().from(BarcodeType.class).where("_id > ?", -1).execute();
             new Delete().from(Feedback.class).where("_id > ?", -1).execute();
             new Delete().from(Shop.class).where("_id > ?", -1).execute();
 

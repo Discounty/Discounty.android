@@ -46,6 +46,7 @@ import discounty.com.R;
 import discounty.com.authenticator.AccountGeneral;
 import discounty.com.data.models.Customer;
 import discounty.com.fragments.DiscountCardsFragment;
+import discounty.com.fragments.ProfileFragment;
 import discounty.com.helpers.BitmapHelper;
 import fr.tkeunebr.gravatar.Gravatar;
 import rx.Observable;
@@ -55,7 +56,9 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        DiscountCardsFragment.OnFragmentInteractionListener {
+        DiscountCardsFragment.OnFragmentInteractionListener,
+        ProfileFragment.OnFragmentInteractionListener {
+
     private static final String STATE_DIALOG = "state_dialog";
 
     private static final String STATE_INVALIDATE = "state_invalidate";
@@ -98,17 +101,18 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        navigationView.getHeaderView(0).setOnClickListener(view -> {
-            Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
-//            Customer customer = new Select().from(Customer.class).executeSingle();
-//            profileIntent.putExtra("Customer", customer);
-            MainActivity.this.startActivity(profileIntent);
-        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> Snackbar.make(view, "Welcome to Discounty!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
+
+        navigationView.getHeaderView(0).setOnClickListener(view -> {
+            setFragment(new ProfileFragment());
+            setTitle("Profile");
+            drawer.closeDrawer(GravityCompat.START);
+            fab.setVisibility(View.INVISIBLE);
+        });
 
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
