@@ -12,10 +12,15 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.activeandroid.query.Select;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
@@ -69,11 +74,32 @@ public class ProfileFragment extends Fragment {
     @Bind(R.id.last_name_update)
     TextView lastNameTxtUpdate;
 
+    @Bind(R.id.country_update_edit)
+    EditText countryEditUpdate;
+
+    @Bind(R.id.city_update_edit)
+    EditText cityEditUpdate;
+
+    @Bind(R.id.phone_number_update_edit)
+    EditText phoneNumberEditUpdate;
+
+    @Bind(R.id.first_name_update_edit)
+    EditText firstNameEditUpdate;
+
+    @Bind(R.id.last_name_update_edit)
+    EditText lastNameEditUpdate;
+
     @Bind(R.id.fab_update_info)
     FloatingActionButton fabUpdateInfo;
 
+    @Bind(R.id.fab_update_photo)
+    FloatingActionButton fabUpdatePhoto;
+
     @Bind(R.id.edit_actions_fab)
     FloatingActionsMenu fabMenu;
+
+    @Bind(R.id.edit_fields_view_switcher)
+    ViewSwitcher editFieldsViewSwitcher;
 
     private Customer customer;
 
@@ -135,35 +161,22 @@ public class ProfileFragment extends Fragment {
         phoneNumberTxtUpdate.setText(customer.phoneNumber);
 
 
-        fabUpdateInfo.setOnClickListener(v -> setTextFieldsToUpdateState());
+        Animation inAnim = new AlphaAnimation(0, 1);
+        inAnim.setDuration(1000);
+        Animation outAnim = new AlphaAnimation(1, 0);
+        outAnim.setDuration(1000);
 
-        firstNameTxtUpdate.setOnClickListener(v -> setTextViewEditable((TextView) v, InputType.TYPE_TEXT_VARIATION_PERSON_NAME));
-        lastNameTxtUpdate.setOnClickListener(v -> setTextViewEditable((TextView) v, InputType.TYPE_TEXT_VARIATION_PERSON_NAME));
-        countryTxtUpdate.setOnClickListener(v -> setTextViewEditable((TextView) v, InputType.TYPE_CLASS_TEXT));
-        cityTxtUpdate.setOnClickListener(v -> setTextViewEditable((TextView) v, InputType.TYPE_CLASS_TEXT));
-        phoneNumberTxtUpdate.setOnClickListener(v -> setTextViewEditable((TextView) v, InputType.TYPE_CLASS_PHONE));
+        editFieldsViewSwitcher.setInAnimation(inAnim);
+        editFieldsViewSwitcher.setOutAnimation(outAnim);
 
-        firstNameTxtUpdate.setOnTouchListener((v, motionEvent) -> {
-            setTextViewEditable((TextView) v, InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-            return true;
+        fabUpdateInfo.setOnClickListener(v -> {
+            setTextFieldsToUpdateState();
+            fabMenu.collapse();
         });
-        lastNameTxtUpdate.setOnTouchListener((v, motionEvent) -> {
-            setTextViewEditable((TextView) v, InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-            return true;
+        fabUpdatePhoto.setOnClickListener((v) -> {
+            createChangePhotoDialog(v);
+            fabMenu.collapse();
         });
-        countryTxtUpdate.setOnTouchListener((v, motionEvent) -> {
-            setTextViewEditable((TextView) v, InputType.TYPE_CLASS_TEXT);
-            return true;
-        });
-        cityTxtUpdate.setOnTouchListener((v, motionEvent) -> {
-            setTextViewEditable((TextView) v, InputType.TYPE_CLASS_TEXT);
-            return true;
-        });
-        phoneNumberTxtUpdate.setOnTouchListener((v, motionEvent) -> {
-            setTextViewEditable((TextView) v, InputType.TYPE_CLASS_PHONE);
-            return true;
-        });
-
 
         TextWatcher watcher = new TextWatcher() {
             @Override
@@ -188,15 +201,17 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    public void setTextFieldsToUpdateState(TextView... fields) {
-        for (TextView view : fields) {
-            setTextViewEditable(view, null);
-        }
-        firstNameTxtUpdate.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-        lastNameTxtUpdate.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-        phoneNumberTxtUpdate.setInputType(InputType.TYPE_CLASS_PHONE);
-        countryTxtUpdate.setInputType(InputType.TYPE_CLASS_TEXT);
-        cityTxtUpdate.setInputType(InputType.TYPE_CLASS_TEXT);
+    public void setTextFieldsToUpdateState() {
+        editFieldsViewSwitcher.showNext();
+        firstNameEditUpdate.setText(firstNameTxtUpdate.getText());
+        lastNameEditUpdate.setText(lastNameTxtUpdate.getText());
+        cityEditUpdate.setText(cityTxtUpdate.getText());
+        countryEditUpdate.setText(countryTxtUpdate.getText());
+        phoneNumberEditUpdate.setText(phoneNumberTxtUpdate.getText());
+    }
+
+
+    private void saveEditedFields() {
     }
 
     public void setTextViewEditable(TextView textView, Integer typeClass) {
@@ -206,6 +221,14 @@ public class ProfileFragment extends Fragment {
         textView.setInputType(typeClass);
         }
         textView.requestFocus();
+    }
+
+    public void createChangePhotoDialog(View v) {
+        new MaterialDialog.Builder(getContext())
+                .title("Change profile photo")
+                .content("If you want to change a profile photo, you need to change your Gravatar.\nWhat's gravatar?")
+                .positiveText("Ok")
+                .show();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
