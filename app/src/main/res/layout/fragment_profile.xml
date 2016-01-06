@@ -223,7 +223,7 @@
                             android:layout_marginStart="25dp"
                             android:padding="25dp"
                             android:textSize="15sp"
-                            android:layout_marginTop="150dp"
+                            android:layout_marginTop="220dp"
                             android:textColor="@color/jet"
                             android:inputType="textPersonName"
                             android:layout_marginEnd="20dp"/>
@@ -355,6 +355,7 @@
             android:id="@+id/fab_save_edited_fields"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
             fab:fab_colorNormal="@color/colorAccent"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_addButtonColorNormal="@color/colorAccent"

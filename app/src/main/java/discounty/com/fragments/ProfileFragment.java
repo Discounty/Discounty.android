@@ -293,14 +293,14 @@ public class ProfileFragment extends Fragment {
 
         if (Build.VERSION.SDK_INT < 23) {
             discountCardsNumber.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.monsoon)), 0,
-                    discountCardsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    discountCardsNumber.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             couponsNumber.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.monsoon)), 0,
-                    couponsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    couponsNumber.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         } else {
             discountCardsNumber.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.monsoon, null)), 0,
-                    discountCardsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    discountCardsNumber.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             couponsNumber.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.monsoon, null)), 0,
-                    couponsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    couponsNumber.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         discountCardsCountTxt.append(discountCardsNumber);
