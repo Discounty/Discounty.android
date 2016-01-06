@@ -76,13 +76,63 @@
 
             </RelativeLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="150dp">
+
+                    <TextView
+                        android:id="@+id/discount_cards_count_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="Discount cards\n0"
+                        android:layout_marginEnd="30dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/jet"/>
+
+                    <TextView
+                        android:id="@+id/coupons_count_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="Coupons\n0"
+                        android:layout_marginStart="30dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/jet"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="15dp">
+
+                    <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/iron"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
                 <ViewSwitcher
                     android:id="@+id/edit_fields_view_switcher"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <RelativeLayout
+                        android:id="@+id/readonly_fields_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
 
                         <TextView
                             android:id="@+id/first_name_update"
@@ -93,7 +143,7 @@
                             android:layout_marginStart="25dp"
                             android:padding="25dp"
                             android:textSize="15sp"
-                            android:layout_marginTop="150dp"
+                            android:layout_marginTop="220dp"
                             android:textColor="@color/jet" />
 
 
@@ -160,6 +210,7 @@
 
                     </RelativeLayout>
                     <RelativeLayout
+                        android:id="@+id/editable_fields_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -174,7 +225,8 @@
                             android:textSize="15sp"
                             android:layout_marginTop="150dp"
                             android:textColor="@color/jet"
-                            android:inputType="textPersonName"/>
+                            android:inputType="textPersonName"
+                            android:layout_marginEnd="20dp"/>
 
 
                         <EditText
@@ -188,13 +240,14 @@
                             android:padding="25dp"
                             android:textSize="15sp"
                             android:textColor="@color/jet"
-                            android:inputType="textPersonName"/>
+                            android:inputType="textPersonName"
+                            android:layout_marginEnd="20dp"/>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:background="@color/iron"
-                            android:layout_below="@+id/last_name_update_edit"/>
+                        <!--<View-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="0.5dp"-->
+                            <!--android:background="@color/iron"-->
+                            <!--android:layout_below="@+id/last_name_update_edit"/>-->
 
                         <EditText
                             android:id="@+id/country_update_edit"
@@ -207,7 +260,8 @@
                             android:padding="25dp"
                             android:textSize="15sp"
                             android:textColor="@color/jet"
-                            android:inputType="text"/>
+                            android:inputType="text"
+                            android:layout_marginEnd="20dp"/>
 
 
                         <EditText
@@ -221,13 +275,14 @@
                             android:padding="25dp"
                             android:textSize="15sp"
                             android:textColor="@color/jet"
-                            android:inputType="text"/>
+                            android:inputType="text"
+                            android:layout_marginEnd="20dp"/>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:background="@color/iron"
-                            android:layout_below="@+id/city_update_edit"/>
+                        <!--<View-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="0.5dp"-->
+                            <!--android:background="@color/iron"-->
+                            <!--android:layout_below="@+id/city_update_edit"/>-->
 
                         <EditText
                             android:id="@+id/phone_number_update_edit"
@@ -240,67 +295,72 @@
                             android:padding="25dp"
                             android:textSize="15sp"
                             android:textColor="@color/jet"
-                            android:inputType="phone"/>
+                            android:inputType="phone"
+                            android:layout_marginEnd="20dp" />
 
                     </RelativeLayout>
                 </ViewSwitcher>
 
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:orientation="horizontal"
-                android:paddingEnd="4dp"
-                android:paddingBottom="2dp">
-
-                <com.getbase.floatingactionbutton.FloatingActionsMenu
-                    xmlns:fab="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/edit_actions_fab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    fab:fab_addButtonColorNormal="@color/colorAccent"
-                    fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
-                    fab:fab_labelsPosition="left"
-                    fab:fab_labelStyle="@style/menu_labels_style">
-
-                    <com.getbase.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/fab_update_photo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        fab:fab_title="Change photo"
-                        fab:fab_icon="@drawable/ic_mode_edit_black_24dp"
-                        fab:fab_colorNormal="@color/colorAccent"
-                        fab:fab_colorPressed="@color/colorPrimaryDark"
-                        fab:fab_addButtonColorNormal="@color/colorAccent"
-                        fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
-                        fab:fab_size="mini"
-                        fab:fab_plusIconColor="@color/white"/>
-
-                    <com.getbase.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/fab_update_info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        fab:fab_title="Edit info"
-                        fab:fab_icon="@drawable/ic_mode_edit_black_24dp"
-                        fab:fab_colorNormal="@color/colorAccent"
-                        fab:fab_colorPressed="@color/colorPrimaryDark"
-                        fab:fab_addButtonColorNormal="@color/colorAccent"
-                        fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
-                        fab:fab_size="mini"
-                        fab:fab_plusIconColor="@color/white"/>
-
-
-                </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
-            </LinearLayout>
-
-
         </RelativeLayout>
 
     </ScrollView>
+
+    <ViewSwitcher
+        android:id="@+id/fab_edit_switcher_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            xmlns:fab="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/edit_actions_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            fab:fab_addButtonColorNormal="@color/colorAccent"
+            fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
+            fab:fab_labelsPosition="left"
+            fab:fab_labelStyle="@style/menu_labels_style">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_update_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_title="Change photo"
+                fab:fab_icon="@drawable/ic_mode_edit_black_24dp"
+                fab:fab_colorNormal="@color/colorAccent"
+                fab:fab_colorPressed="@color/colorPrimaryDark"
+                fab:fab_addButtonColorNormal="@color/colorAccent"
+                fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
+                fab:fab_size="mini"
+                fab:fab_plusIconColor="@color/white"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_update_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_title="Edit info"
+                fab:fab_icon="@drawable/ic_mode_edit_black_24dp"
+                fab:fab_colorNormal="@color/colorAccent"
+                fab:fab_colorPressed="@color/colorPrimaryDark"
+                fab:fab_addButtonColorNormal="@color/colorAccent"
+                fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
+                fab:fab_size="mini"
+                fab:fab_plusIconColor="@color/white"/>
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            xmlns:fab="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/fab_save_edited_fields"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_addButtonColorNormal="@color/colorAccent"
+            fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
+            fab:fab_icon="@drawable/ic_done_black_24dp"
+            fab:fab_plusIconColor="@color/white"/>
+    </ViewSwitcher>
 
 </FrameLayout>

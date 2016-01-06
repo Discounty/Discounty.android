@@ -2,11 +2,15 @@ package discounty.com.fragments;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,6 +20,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
@@ -23,6 +28,8 @@ import com.activeandroid.query.Select;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
+import org.w3c.dom.Text;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -98,8 +105,26 @@ public class ProfileFragment extends Fragment {
     @Bind(R.id.edit_actions_fab)
     FloatingActionsMenu fabMenu;
 
+    @Bind(R.id.fab_save_edited_fields)
+    FloatingActionButton fabSave;
+
     @Bind(R.id.edit_fields_view_switcher)
     ViewSwitcher editFieldsViewSwitcher;
+
+    @Bind(R.id.fab_edit_switcher_view)
+    ViewSwitcher fabEditViewSwitcher;
+
+    @Bind(R.id.readonly_fields_layout)
+    RelativeLayout readonlyLayout;
+
+    @Bind(R.id.editable_fields_layout)
+    RelativeLayout editableLayout;
+
+    @Bind(R.id.coupons_count_txt)
+    TextView couponsCountTxt;
+
+    @Bind(R.id.discount_cards_count_txt)
+    TextView discountCardsCountTxt;
 
     private Customer customer;
 
@@ -162,12 +187,14 @@ public class ProfileFragment extends Fragment {
 
 
         Animation inAnim = new AlphaAnimation(0, 1);
-        inAnim.setDuration(1000);
+        inAnim.setDuration(300);
         Animation outAnim = new AlphaAnimation(1, 0);
-        outAnim.setDuration(1000);
+        outAnim.setDuration(300);
 
         editFieldsViewSwitcher.setInAnimation(inAnim);
         editFieldsViewSwitcher.setOutAnimation(outAnim);
+        fabEditViewSwitcher.setInAnimation(inAnim);
+        fabEditViewSwitcher.setOutAnimation(outAnim);
 
         fabUpdateInfo.setOnClickListener(v -> {
             setTextFieldsToUpdateState();
@@ -198,16 +225,26 @@ public class ProfileFragment extends Fragment {
         firstNameTxtUpdate.addTextChangedListener(watcher);
         lastNameTxtUpdate.addTextChangedListener(watcher);
 
+        initCardsAndCouponsTextViews();
+
         return view;
     }
 
     public void setTextFieldsToUpdateState() {
         editFieldsViewSwitcher.showNext();
-        firstNameEditUpdate.setText(firstNameTxtUpdate.getText());
-        lastNameEditUpdate.setText(lastNameTxtUpdate.getText());
-        cityEditUpdate.setText(cityTxtUpdate.getText());
-        countryEditUpdate.setText(countryTxtUpdate.getText());
-        phoneNumberEditUpdate.setText(phoneNumberTxtUpdate.getText());
+        fabEditViewSwitcher.showNext();
+        if (editFieldsViewSwitcher.getCurrentView() == editableLayout){
+            firstNameEditUpdate.setText(firstNameTxtUpdate.getText());
+            firstNameEditUpdate.setCursorVisible(true);
+            lastNameEditUpdate.setText(lastNameTxtUpdate.getText());
+            lastNameEditUpdate.setCursorVisible(true);
+            cityEditUpdate.setText(cityTxtUpdate.getText());
+            cityEditUpdate.setCursorVisible(true);
+            countryEditUpdate.setText(countryTxtUpdate.getText());
+            countryEditUpdate.setCursorVisible(true);
+            phoneNumberEditUpdate.setText(phoneNumberTxtUpdate.getText());
+            phoneNumberEditUpdate.setCursorVisible(true);
+        }
     }
 
 
@@ -229,6 +266,45 @@ public class ProfileFragment extends Fragment {
                 .content("If you want to change a profile photo, you need to change your Gravatar.\nWhat's gravatar?")
                 .positiveText("Ok")
                 .show();
+    }
+
+    private void initCardsAndCouponsTextViews() {
+        Spannable discountCardsTitle = new SpannableString("Discount cards" + "\n");
+        Spannable couponsTitle = new SpannableString("Coupons" + "\n");
+
+        if (Build.VERSION.SDK_INT < 23) {
+            discountCardsTitle.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.jet)), 0,
+                    discountCardsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            couponsTitle.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.jet)), 0,
+                    couponsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else {
+            discountCardsTitle.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.jet, null)), 0,
+                    discountCardsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            couponsTitle.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.jet, null)), 0,
+                    couponsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        discountCardsCountTxt.setText(discountCardsTitle, TextView.BufferType.SPANNABLE);
+        couponsCountTxt.setText(couponsTitle, TextView.BufferType.SPANNABLE);
+
+        Spannable discountCardsNumber = new SpannableString(String.valueOf(customer.discountCards().size()));
+        // TODO Add coupons to customer
+        Spannable couponsNumber = new SpannableString(String.valueOf(0));
+
+        if (Build.VERSION.SDK_INT < 23) {
+            discountCardsNumber.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.monsoon)), 0,
+                    discountCardsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            couponsNumber.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.monsoon)), 0,
+                    couponsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else {
+            discountCardsNumber.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.monsoon, null)), 0,
+                    discountCardsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            couponsNumber.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.monsoon, null)), 0,
+                    couponsTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        discountCardsCountTxt.append(discountCardsNumber);
+        couponsCountTxt.append(couponsNumber);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
