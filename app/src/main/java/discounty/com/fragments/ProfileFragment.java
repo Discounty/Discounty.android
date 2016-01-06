@@ -195,31 +195,36 @@ public class ProfileFragment extends Fragment {
         fabEditViewSwitcher.setOutAnimation(outAnim);
 
         fabUpdateInfo.setOnClickListener(v -> {
-            setTextFieldsToUpdateState();
             fabMenu.collapse();
+            setTextFieldsToUpdateState();
         });
         fabUpdatePhoto.setOnClickListener((v) -> {
-            createChangePhotoDialog(v);
             fabMenu.collapse();
+            createChangePhotoDialog(v);
         });
 
         TextWatcher watcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 nameTxt.setText(firstNameTxtUpdate.getText() + " " + lastNameTxtUpdate.getText());
+                nameTxt.setText(firstNameEditUpdate.getText() + " " + lastNameEditUpdate.getText());
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 nameTxt.setText(firstNameTxtUpdate.getText() + " " + lastNameTxtUpdate.getText());
+                nameTxt.setText(firstNameEditUpdate.getText() + " " + lastNameEditUpdate.getText());
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
                 nameTxt.setText(firstNameTxtUpdate.getText() + " " + lastNameTxtUpdate.getText());
+                nameTxt.setText(firstNameEditUpdate.getText() + " " + lastNameEditUpdate.getText());
             }
         };
 
+        firstNameEditUpdate.addTextChangedListener(watcher);
+        lastNameEditUpdate.addTextChangedListener(watcher);
         firstNameTxtUpdate.addTextChangedListener(watcher);
         lastNameTxtUpdate.addTextChangedListener(watcher);
 
@@ -237,6 +242,11 @@ public class ProfileFragment extends Fragment {
                 }
             }
             return true;
+        });
+
+        fabSave.setOnClickListener(v -> {
+            saveEditedFields();
+            fabEditViewSwitcher.showNext();
         });
 
         return view;
@@ -261,15 +271,6 @@ public class ProfileFragment extends Fragment {
 
 
     private void saveEditedFields() {
-    }
-
-    public void setTextViewEditable(TextView textView, Integer typeClass) {
-        textView.setCursorVisible(true);
-        textView.setFocusableInTouchMode(true);
-        if (typeClass != null) {
-        textView.setInputType(typeClass);
-        }
-        textView.requestFocus();
     }
 
     public void createChangePhotoDialog(View v) {
@@ -342,6 +343,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        getActivity().findViewById(R.id.fab).setVisibility(View.VISIBLE);
+        fabMenu.setVisibility(View.INVISIBLE);
         mListener = null;
     }
 
