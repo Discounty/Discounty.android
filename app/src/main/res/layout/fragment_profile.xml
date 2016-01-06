@@ -173,7 +173,8 @@
                             android:padding="25dp"
                             android:textSize="15sp"
                             android:layout_marginTop="150dp"
-                            android:textColor="@color/jet" />
+                            android:textColor="@color/jet"
+                            android:inputType="textPersonName"/>
 
 
                         <EditText
@@ -186,7 +187,8 @@
                             android:layout_marginStart="25dp"
                             android:padding="25dp"
                             android:textSize="15sp"
-                            android:textColor="@color/jet"/>
+                            android:textColor="@color/jet"
+                            android:inputType="textPersonName"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -204,7 +206,8 @@
                             android:layout_marginStart="25dp"
                             android:padding="25dp"
                             android:textSize="15sp"
-                            android:textColor="@color/jet"/>
+                            android:textColor="@color/jet"
+                            android:inputType="text"/>
 
 
                         <EditText
@@ -217,7 +220,8 @@
                             android:layout_marginStart="25dp"
                             android:padding="25dp"
                             android:textSize="15sp"
-                            android:textColor="@color/jet"/>
+                            android:textColor="@color/jet"
+                            android:inputType="text"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -225,7 +229,7 @@
                             android:background="@color/iron"
                             android:layout_below="@+id/city_update_edit"/>
 
-                        <TextView
+                        <EditText
                             android:id="@+id/phone_number_update_edit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -235,7 +239,8 @@
                             android:layout_marginStart="25dp"
                             android:padding="25dp"
                             android:textSize="15sp"
-                            android:textColor="@color/jet"/>
+                            android:textColor="@color/jet"
+                            android:inputType="phone"/>
 
                     </RelativeLayout>
                 </ViewSwitcher>
@@ -248,7 +253,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:orientation="horizontal"
-                android:paddingEnd="2dp"
+                android:paddingEnd="4dp"
                 android:paddingBottom="2dp">
 
                 <com.getbase.floatingactionbutton.FloatingActionsMenu
