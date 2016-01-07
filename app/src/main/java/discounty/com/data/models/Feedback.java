@@ -24,7 +24,7 @@ public class Feedback extends Model {
     @Column(name = "UpdatedAt")
     public Long updatedAt;
 
-    @Column(name = "Customer", onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "Customer")
     public Customer customer;
 
     public Feedback() {

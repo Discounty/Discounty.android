@@ -137,8 +137,6 @@ public class DiscountCardsFragment extends Fragment {
 
         Customer customer = new Select().from(Customer.class).executeSingle();
         List<DiscountCard> records = customer.discountCards();
-        records.addAll(records);
-        records.addAll(records);
 
         DiscountCardsListAdapter adapter = new DiscountCardsListAdapter(records);
 

@@ -30,7 +30,7 @@ public class Coupon extends Model {
     @Column(name = "Barcode")
     public Barcode barcode;
 
-    @Column(name = "Customer", onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "Customer")
     public Customer customer;
 
     public Coupon() {

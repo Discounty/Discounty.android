@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/discount_card_item_relative_layout"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="80dp"
@@ -12,14 +14,16 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="15dp"
-        android:id="@+id/discount_card_item_image"/>
+        android:id="@+id/discount_card_item_image"
+        android:contentDescription="Circle"/>
 
     <LinearLayout
+        android:id="@+id/discount_card_text_linear_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center_vertical"
-        android:layout_toRightOf="@+id/discount_card_item_image"
+        android:layout_toEndOf="@+id/discount_card_item_image"
         android:orientation="vertical">
 
         <TextView

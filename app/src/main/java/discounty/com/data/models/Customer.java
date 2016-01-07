@@ -71,12 +71,28 @@ public class Customer extends Model implements Parcelable {
         this.avatarBig = avatarBig;
     }
 
+    public static final Creator<Customer> CREATOR = new Creator<Customer>() {
+        @Override
+        public Customer createFromParcel(Parcel in) {
+            return new Customer(in);
+        }
+
+        @Override
+        public Customer[] newArray(int size) {
+            return new Customer[size];
+        }
+    };
+
     public List<DiscountCard> discountCards() {
         return getMany(DiscountCard.class, "Customer");
     }
 
     public List<Feedback> feedbacks() {
         return getMany(Feedback.class, "Customer");
+    }
+
+    public List<Coupon> coupons() {
+        return getMany(Coupon.class, "Customer");
     }
 
 
@@ -91,18 +107,6 @@ public class Customer extends Model implements Parcelable {
         avatarSmall = in.readString();
         avatarBig = in.readString();
     }
-
-    public static final Creator<Customer> CREATOR = new Creator<Customer>() {
-        @Override
-        public Customer createFromParcel(Parcel in) {
-            return new Customer(in);
-        }
-
-        @Override
-        public Customer[] newArray(int size) {
-            return new Customer[size];
-        }
-    };
 
     @Override
     public int describeContents() {

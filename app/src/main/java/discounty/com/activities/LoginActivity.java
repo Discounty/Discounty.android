@@ -30,6 +30,8 @@ import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
+import com.jakewharton.rxbinding.view.RxView;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
@@ -42,9 +44,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import discounty.com.DiscountyApp;
 import discounty.com.R;
 import discounty.com.api.ServiceGenerator;
 import discounty.com.authenticator.AccountGeneral;
@@ -61,6 +65,7 @@ import discounty.com.models.CardBarcodeType;
 import discounty.com.models.Customer;
 import rx.Observable;
 import rx.Subscriber;
+import rx.android.plugins.RxAndroidPlugins;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -150,22 +155,30 @@ public class LoginActivity extends AccountAuthenticatorActivity
         }
 
         // Set up the login form.
-//        mEmailInput = (EditText) findViewById(R.id.input_email);
         populateAutoComplete();
 
         mPasswordInput = (EditText) findViewById(R.id.input_password);
-//        mPasswordInput.setOnEditorActionListener((textView, id, keyEvent) -> {
-//            if (id == R.id.login || id == EditorInfo.IME_NULL) {
-//                attemptLogin();
-//                return true;
-//            }
-//            return false;
-//        });
 
-//        Button mEmailSignInButton = (Button) findViewById(R.id.btn_login);
-//        mEmailSignInButton.setOnClickListener(view -> submit());
+        RxView.clicks(btnLogin)
+                .debounce(1000, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Void>() {
+                    @Override
+                    public void onCompleted() {
 
-        btnLogin.setOnClickListener(v -> validator.validate(true));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Void aVoid) {
+                        validator.validate(true);
+                    }
+                });
+//        btnLogin.setOnClickListener(v -> validator.validate(true));
 
         TextView mSignup = (TextView) findViewById(R.id.btn_signup);
         mSignup.setOnClickListener(v -> {
@@ -341,21 +354,31 @@ public class LoginActivity extends AccountAuthenticatorActivity
 
     private void saveCustomerToDb(Customer customer) {
         try {
+
             // Clear the DB
-            new Delete().from(discounty.com.data.models.Customer.class).where("_id > ?", -1).execute();
-            new Delete().from(Coupon.class).where("_id > ?", -1).execute();
-            new Delete().from(Barcode.class).where("_id > ?", -1).execute();
-            new Delete().from(BarcodeType.class).where("_id > ?", -1).execute();
-            new Delete().from(Feedback.class).where("_id > ?", -1).execute();
-            new Delete().from(Shop.class).where("_id > ?", -1).execute();
+            DiscountyApp.clearAllDbTables();
+//            new Delete().from(Coupon.class).where("_id > ?", -1).execute();
+//            new Delete().from(Barcode.class).where("_id > ?", -1).execute();
+//            new Delete().from(BarcodeType.class).where("_id > ?", -1).execute();
+//            new Delete().from(Feedback.class).where("_id > ?", -1).execute();
+//            new Delete().from(Shop.class).where("_id > ?", -1).execute();
+//            new Delete().from(discounty.com.data.models.Customer.class).where("_id > ?", -1).execute();
 
-            Log.d("saveCustomerToDb()", "FINISH CLEARING THE DB");
 
+//            Log.d("saveCustomerToDb()", "FINISH CLEARING THE DB");
+
+//            discounty.com.data.models.Customer customerAA = new Select().from(discounty.com.data.models.Customer.class)
+//                    .executeSingle();
+//
+//            if (customerAA == null) {
+//                Log.d("saveCustomerToDb", "CUSTOMER IS NULL");
             discounty.com.data.models.Customer customerAA = new discounty.com.data.models.Customer();
+//            }
 
 //            List<discounty.com.models.DiscountCard> discountCards = new ArrayList<>();
 
             // Customer general info
+
             customerAA.serverId = customer.getId();
             customerAA.firstName = customer.getFirstName();
             customerAA.lastName = customer.getLastName();

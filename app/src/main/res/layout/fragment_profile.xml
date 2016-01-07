@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profile_fragment_frame_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="discounty.com.fragments.ProfileFragment"
@@ -10,7 +12,7 @@
 
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/login_form"
+        android:id="@+id/profile_fragment_scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fitsSystemWindows="true">
@@ -18,6 +20,7 @@
         <RelativeLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/profile_fragment_main_rel_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -77,11 +80,13 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/header_with_counters_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/counters_linear_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -112,15 +117,17 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/divider_below_counters_holder"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:layout_marginTop="15dp">
 
                     <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/iron"/>
+                        android:id="@+id/divider_below_counters"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/iron"/>
 
                 </LinearLayout>
 
@@ -342,7 +349,7 @@
                 android:layout_height="wrap_content"
                 android:tint="@color/white"
                 fab:fab_title="Change photo"
-                fab:fab_icon="@drawable/ic_mode_edit_black_24dp"
+                fab:fab_icon="@drawable/ic_camera_alt_white_18dp"
                 fab:fab_colorNormal="@color/colorAccent"
                 fab:fab_colorPressed="@color/colorPrimaryDark"
                 fab:fab_addButtonColorNormal="@color/colorAccent"
@@ -355,8 +362,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:tint="@color/white"
-                fab:fab_title="Edit info"
-                fab:fab_icon="@drawable/ic_mode_edit_black_24dp"
+                fab:fab_title="Edit profile"
+                fab:fab_icon="@drawable/ic_mode_edit_white_18dp"
                 fab:fab_colorNormal="@color/colorAccent"
                 fab:fab_colorPressed="@color/colorPrimaryDark"
                 fab:fab_addButtonColorNormal="@color/colorAccent"
@@ -377,10 +384,11 @@
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_addButtonColorNormal="@color/colorAccent"
             fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
-            fab:fab_icon="@drawable/ic_done_black_24dp"
+            fab:fab_icon="@drawable/ic_done_white_24dp"
             fab:fab_plusIconColor="@color/white"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="2dp"/>
+
     </ViewSwitcher>
 
 </FrameLayout>

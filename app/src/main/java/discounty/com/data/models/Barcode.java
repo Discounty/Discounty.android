@@ -30,7 +30,7 @@ public class Barcode extends Model {
     @Column(name = "BarcodeType")
     public BarcodeType barcodeType;
 
-    @Column(name = "Customer", onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "Customer")
     public Customer customer;
 
     @Column(name = "ServerId")

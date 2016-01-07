@@ -29,7 +29,7 @@
             android:value="Discounty.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="2" />
+            android:value="1" />
         <meta-data
             android:name="AA_MODELS"
             android:value="com.discounty.data.models.Barcode, com.discounty.data.models.BarcodeType, com.discounty.data.models.Coupon, com.discounty.data.models.Customer, com.discounty.data.models.DiscountCard, com.discounty.data.models.Feedback, com.discounty.data.models.Shop" />
@@ -45,7 +45,8 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -6,10 +6,8 @@ import android.accounts.AuthenticatorException;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
@@ -25,17 +23,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.query.Select;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -43,9 +40,12 @@ import java.io.IOException;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import discounty.com.DiscountyApp;
 import discounty.com.R;
 import discounty.com.authenticator.AccountGeneral;
+import discounty.com.bus.BusProvider;
 import discounty.com.data.models.Customer;
+import discounty.com.bus.events.NameChangeEvent;
 import discounty.com.fragments.DiscountCardsFragment;
 import discounty.com.fragments.ProfileFragment;
 import discounty.com.helpers.BitmapHelper;
@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity
 
     private RecyclerView.LayoutManager layoutManager;
 
+    private Bus bus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +93,8 @@ public class MainActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
 
+        bus = BusProvider.getInstance();
+        bus.register(this);
 
         accountManager = AccountManager.get(this);
 
@@ -116,7 +120,6 @@ public class MainActivity extends AppCompatActivity
             fab.setVisibility(View.INVISIBLE);
         });
 
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -125,24 +128,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        initDiscountCardsRecyclerView();
-
-
-//        findViewById(R.id.button).setOnClickListener(view -> {
-//            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-////                intent.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
-//            startActivityForResult(intent, 0);
-//        });
-
-
-//        String gravatarUrl = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
-//                .size(BitmapHelper.dpToPx(108, getApplicationContext())).build();
-//        Bitmap avatar = null;
-//        try {
-//            avatar = Picasso.with(getApplicationContext()).load(gravatarUrl).get();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         final CircleImageView imgAvatar = (CircleImageView) navigationView.getHeaderView(0).findViewById(R.id.img_avatar);
         Account account = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0];
@@ -162,22 +147,13 @@ public class MainActivity extends AppCompatActivity
                         ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_header))
                                 .setText(customer.firstName + ' ' + customer.lastName);
 
-
                         String gravatarUrlSmall = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
                                 .size(BitmapHelper.dpToPx(85, getApplicationContext())).build();
 
-                        DisplayMetrics metrics = new DisplayMetrics();
-                        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                        String gravatarUrlBig = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
-                                .size(metrics.widthPixels).build();
-
                         Bitmap smallAvatar = Picasso.with(getApplicationContext()).load(gravatarUrlSmall).get();
-
-                        Bitmap bigAvatar = Picasso.with(getApplicationContext()).load(gravatarUrlBig).get();
 
                         try {
                             customer.avatarSmall = BitmapHelper.bitmapToBase64(smallAvatar.copy(smallAvatar.getConfig(), true));
-                            customer.avatarBig = BitmapHelper.bitmapToBase64(bigAvatar.copy(bigAvatar.getConfig(), true));
                             customer.save();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -185,7 +161,7 @@ public class MainActivity extends AppCompatActivity
 
                         // result[0] - small avatar for nav drawer,
                         // result[1] - big avatar for profile fragment.
-                        Bitmap[] result = new Bitmap[]{smallAvatar, bigAvatar};
+                        Bitmap[] result = new Bitmap[]{smallAvatar};
 
                         subscriber.onNext(result);
                         subscriber.onCompleted();
@@ -209,15 +185,6 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onNext(Bitmap[] bitmaps) {
                     imgAvatar.setImageBitmap(BitmapHelper.getCircleBitmap(bitmaps[0]));
-
-//                    try {
-//                        Customer customer = new Select().from(Customer.class).executeSingle();
-//                        customer.avatarSmall = BitmapHelper.bitmapToBase64(bitmaps[0].copy(bitmaps[0].getConfig(), true));
-//                        customer.avatarBig = BitmapHelper.bitmapToBase64(bitmaps[1].copy(bitmaps[1].getConfig(), true));
-//                        customer.save();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
                 }
             };
 
@@ -260,6 +227,16 @@ public class MainActivity extends AppCompatActivity
 //        } catch(Exception e) {
 //            e.printStackTrace();
 //        }
+
+
+        // Select discount cards fragment on the start
+        navigationView.getMenu().getItem(0).setChecked(true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BusProvider.getInstance().unregister(this);
     }
 
     @Override
@@ -277,6 +254,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Subscribe
+    public void updateNavDrawerCustomerName(NameChangeEvent event) {
+        Log.d("BUS in MainActivity", "NAME CHANGE EVENT FIRED");
+        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_header))
+                .setText(event.getFirstName() + ' ' + event.getLastName());
     }
 
 
@@ -339,11 +323,6 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
         switch (id) {
             case R.id.action_settings:
                 Toast.makeText(getApplicationContext(), "Settings pressed", Toast.LENGTH_LONG).show();
@@ -355,8 +334,6 @@ public class MainActivity extends AppCompatActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
-
-//        return super.onOptionsItemSelected(item);
     }
 
     private void performLogout() {
@@ -439,38 +416,11 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.frame_layout_main_activity, fragment).commit();
-
         setFragment(fragment);
 
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         item.setChecked(true);
         setTitle(item.getTitle());
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-//    private void initDiscountCardsRecyclerView() {
-//        cardsRecyclerView.setHasFixedSize(true);
-//
-//        layoutManager = new LinearLayoutManager(this);
-//        cardsRecyclerView.setLayoutManager(layoutManager);
-//
-//        List<DiscountCard> records = new ArrayList<>();
-//        records.add(null);
-//        records.add(null);
-//        records.add(null);
-//        records.add(null);
-//        records.add(null);
-//        records.add(null);
-//        records.add(null);
-//        records.add(null);
-//        records.add(null);
-//
-//        DiscountCardsListAdapter adapter = new DiscountCardsListAdapter(records);
-//
-//        cardsRecyclerView.setAdapter(adapter);
-//        cardsRecyclerView.setItemAnimator(cardsRecyclerView.getItemAnimator());
-//    }
 }
