@@ -7,7 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import discounty.com.R;
 
 /**
@@ -28,6 +31,12 @@ public class CreateDiscountCardFragment extends Fragment {
     private String barcodeFormat;
 
     private OnFragmentInteractionListener mListener;
+
+    @Bind(R.id.discount_card_barcode)
+    TextView txtBarcode;
+
+    @Bind(R.id.discount_card_barcode_format)
+    TextView txtBarcodeFormat;
 
     public CreateDiscountCardFragment() {
         // Required empty public constructor
@@ -56,6 +65,8 @@ public class CreateDiscountCardFragment extends Fragment {
         if (getArguments() != null) {
             barcode = getArguments().getString(BARCODE_PARAM);
             barcodeFormat = getArguments().getString(BARCODE_FORMAT_PARAM);
+
+
         }
     }
 
@@ -63,7 +74,15 @@ public class CreateDiscountCardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_discount_card, container, false);
+        View view = inflater.inflate(R.layout.fragment_create_discount_card, container, false);
+
+        ButterKnife.bind(this, view);
+
+
+        txtBarcode.setText(barcode);
+        txtBarcodeFormat.setText(barcodeFormat);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -59,6 +59,7 @@ import rx.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         DiscountCardsFragment.OnFragmentInteractionListener,
+        CreateDiscountCardFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener {
 
     private static final String STATE_DIALOG = "state_dialog";
@@ -247,7 +248,7 @@ public class MainActivity extends AppCompatActivity
 
     public void onScan(View v) {
         Intent data = new Intent("com.google.zxing.client.android.SCAN");
-//        data.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
+        data.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "SCAN_MODE");
         startActivityForResult(data, 0);
     }
 
@@ -262,10 +263,10 @@ public class MainActivity extends AppCompatActivity
                 String barcode = data.getStringExtra("SCAN_RESULT");
                 String format = data.getStringExtra("SCAN_RESULT_FORMAT");
 
+                getSupportFragmentManager().executePendingTransactions();
                 final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_layout_main_activity,
                         CreateDiscountCardFragment.newInstance(barcode, format));
-                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
 
