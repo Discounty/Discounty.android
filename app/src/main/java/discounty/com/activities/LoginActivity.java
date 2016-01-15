@@ -356,26 +356,29 @@ public class LoginActivity extends AccountAuthenticatorActivity
         try {
 
             // Clear the DB
-            DiscountyApp.clearAllDbTables();
-//            new Delete().from(Coupon.class).where("_id > ?", -1).execute();
-//            new Delete().from(Barcode.class).where("_id > ?", -1).execute();
-//            new Delete().from(BarcodeType.class).where("_id > ?", -1).execute();
-//            new Delete().from(Feedback.class).where("_id > ?", -1).execute();
-//            new Delete().from(Shop.class).where("_id > ?", -1).execute();
+            new Delete().from(DiscountCard.class).where("_id > ?", -1).execute();
+            new Delete().from(Coupon.class).where("_id > ?", -1).execute();
 //            new Delete().from(discounty.com.data.models.Customer.class).where("_id > ?", -1).execute();
+            new Delete().from(Barcode.class).where("_id > ?", -1).execute();
+            new Delete().from(BarcodeType.class).where("_id > ?", -1).execute();
+            new Delete().from(Feedback.class).where("_id > ?", -1).execute();
+            new Delete().from(Shop.class).where("_id > ?", -1).execute();
 
 
-//            Log.d("saveCustomerToDb()", "FINISH CLEARING THE DB");
+            Log.d("saveCustomerToDb()", "FINISH CLEARING THE DB");
 
-//            discounty.com.data.models.Customer customerAA = new Select().from(discounty.com.data.models.Customer.class)
-//                    .executeSingle();
-//
-//            if (customerAA == null) {
-//                Log.d("saveCustomerToDb", "CUSTOMER IS NULL");
-            discounty.com.data.models.Customer customerAA = new discounty.com.data.models.Customer();
-//            }
+            Cursor curCount = ActiveAndroid.getDatabase().rawQuery("SELECT count(*) FROM Customers;", null);
+            curCount.moveToFirst();
+            int customerCount = curCount.getInt(0);
+            curCount.close();
 
-//            List<discounty.com.models.DiscountCard> discountCards = new ArrayList<>();
+            discounty.com.data.models.Customer customerAA;
+
+            if (customerCount == 0) {
+                customerAA = new discounty.com.data.models.Customer();
+            } else {
+                customerAA = new Select().from(discounty.com.data.models.Customer.class).executeSingle();
+            }
 
             // Customer general info
 

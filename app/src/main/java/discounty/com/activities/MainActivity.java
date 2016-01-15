@@ -30,12 +30,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,8 +47,14 @@ import discounty.com.DiscountyApp;
 import discounty.com.R;
 import discounty.com.authenticator.AccountGeneral;
 import discounty.com.bus.BusProvider;
+import discounty.com.data.models.Barcode;
+import discounty.com.data.models.BarcodeType;
+import discounty.com.data.models.Coupon;
 import discounty.com.data.models.Customer;
 import discounty.com.bus.events.NameChangeEvent;
+import discounty.com.data.models.DiscountCard;
+import discounty.com.data.models.Feedback;
+import discounty.com.data.models.Shop;
 import discounty.com.fragments.DiscountCardsFragment;
 import discounty.com.fragments.ProfileFragment;
 import discounty.com.helpers.BitmapHelper;
@@ -128,10 +137,14 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         final CircleImageView imgAvatar = (CircleImageView) navigationView.getHeaderView(0).findViewById(R.id.img_avatar);
+
+
         Account account = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0];
-        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_subheader)).setText(account.name);
+        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_subheader)).setText(account.name);
+
+        Customer customerTest = new Select().from(Customer.class).executeSingle();
+        Log.d("CURRENT CUSTOMER INFO", customerTest.firstName + " " + customerTest.lastName);
 
 
         Log.d("EMAIL URL", account.name);
@@ -301,9 +314,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        }
+
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -328,6 +345,24 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), "Settings pressed", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_logout:
+                Log.d("PERFORM LOGOUT", "STARTED LOGGING OUT");
+                finish();
+                Customer customer = new Select().from(Customer.class).executeSingle();
+
+//                new Delete().from(BarcodeType.class).execute();
+//                new Delete().from(Barcode.class).execute();
+//                new Delete().from(DiscountCard.class).execute();
+//                new Delete().from(Coupon.class).execute();
+//                new Delete().from(Feedback.class).execute();
+//                new Delete().from(Customer.class).execute();
+//                new Delete().from(Shop.class).execute();
+
+//                Customer.delete(Customer.class, customer.getId());
+
+//                ActiveAndroid.dispose();
+//
+//                ActiveAndroid.initialize(getBaseContext());
+
                 performLogout();
                 return true;
 

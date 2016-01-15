@@ -155,6 +155,12 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        customer = null;
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -479,12 +485,6 @@ public class ProfileFragment extends Fragment {
 
         discountCardsCountTxt.append(discountCardsNumber);
         couponsCountTxt.append(couponsNumber);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        BusProvider.getInstance().unregister(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
