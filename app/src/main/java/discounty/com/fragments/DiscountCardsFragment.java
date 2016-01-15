@@ -1,10 +1,13 @@
 package discounty.com.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +28,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import discounty.com.R;
+import discounty.com.activities.MainActivity;
 import discounty.com.adapters.DiscountCardsListAdapter;
 import discounty.com.data.models.Customer;
 import discounty.com.data.models.DiscountCard;
@@ -46,6 +50,8 @@ public class DiscountCardsFragment extends Fragment {
 
     @Bind(R.id.cards_recycler_view)
     UltimateRecyclerView cardsRecyclerView;
+
+    FloatingActionButton btnFab;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -86,10 +92,6 @@ public class DiscountCardsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-//        LayoutInflater inflater =
-
-//        initDiscountCardsRecyclerView();
     }
 
     @Override
@@ -100,7 +102,11 @@ public class DiscountCardsFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
+        btnFab = (FloatingActionButton)getActivity().findViewById(R.id.fab);
+
         initDiscountCardsRecyclerView();
+
+        btnFab.setOnClickListener(this::startAddNewDiscountCardAction);
 
         return view;
     }
@@ -127,6 +133,36 @@ public class DiscountCardsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void onScan(View v) {
+        Intent data = new Intent("com.google.zxing.client.android.SCAN");
+//        data.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
+        startActivityForResult(data, 0);
+    }
+
+    public void startAddNewDiscountCardAction(View v) {
+        onScan(v);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+
+            if (resultCode == MainActivity.RESULT_OK) {
+                String barcode = data.getStringExtra("SCAN_RESULT");
+                String format = data.getStringExtra("SCAN_RESULT_FORMAT");
+
+                final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_layout_main_activity,
+                        CreateDiscountCardFragment.newInstance(barcode, format));
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initDiscountCardsRecyclerView() {

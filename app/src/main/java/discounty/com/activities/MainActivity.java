@@ -17,6 +17,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,31 +31,21 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.activeandroid.ActiveAndroid;
-import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import discounty.com.DiscountyApp;
 import discounty.com.R;
 import discounty.com.authenticator.AccountGeneral;
 import discounty.com.bus.BusProvider;
-import discounty.com.data.models.Barcode;
-import discounty.com.data.models.BarcodeType;
-import discounty.com.data.models.Coupon;
 import discounty.com.data.models.Customer;
 import discounty.com.bus.events.NameChangeEvent;
-import discounty.com.data.models.DiscountCard;
-import discounty.com.data.models.Feedback;
-import discounty.com.data.models.Shop;
 import discounty.com.fragments.DiscountCardsFragment;
 import discounty.com.fragments.ProfileFragment;
 import discounty.com.helpers.BitmapHelper;
@@ -73,15 +64,11 @@ public class MainActivity extends AppCompatActivity
 
     private static final String STATE_INVALIDATE = "state_invalidate";
 
-//    @Bind(R.id.cards_recycler_view)
-
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
 
     @Bind(R.id.nav_view)
     NavigationView navigationView;
-
-//    @Bind(R.id.nav_header_main_layout)
 
     private String TAG = this.getClass().getSimpleName();
 
@@ -260,8 +247,10 @@ public class MainActivity extends AppCompatActivity
 
     public void setFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.frame_layout_main_activity, fragment)
-                .commit();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout_main_activity, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -287,12 +276,6 @@ public class MainActivity extends AppCompatActivity
                         MainActivity.this.finish();
                     }
                 }, null);
-    }
-
-    public void OnScan(View v) {
-        Intent data = new Intent("com.google.zxing.client.android.SCAN");
-//        data.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
-        startActivityForResult(data, 0);
     }
 
     @Override
@@ -348,20 +331,6 @@ public class MainActivity extends AppCompatActivity
                 Log.d("PERFORM LOGOUT", "STARTED LOGGING OUT");
                 finish();
                 Customer customer = new Select().from(Customer.class).executeSingle();
-
-//                new Delete().from(BarcodeType.class).execute();
-//                new Delete().from(Barcode.class).execute();
-//                new Delete().from(DiscountCard.class).execute();
-//                new Delete().from(Coupon.class).execute();
-//                new Delete().from(Feedback.class).execute();
-//                new Delete().from(Customer.class).execute();
-//                new Delete().from(Shop.class).execute();
-
-//                Customer.delete(Customer.class, customer.getId());
-
-//                ActiveAndroid.dispose();
-//
-//                ActiveAndroid.initialize(getBaseContext());
 
                 performLogout();
                 return true;

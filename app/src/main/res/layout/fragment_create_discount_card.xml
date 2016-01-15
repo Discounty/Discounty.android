@@ -1,0 +1,32 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="discounty.com.fragments.CreateDiscountCardFragment">
+
+    <LinearLayout
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/discount_card_barcode_format"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Discount Card Barcode Format"
+            android:textSize="25sp"
+            android:layout_margin="5dp"/>
+
+        <TextView
+            android:id="@+id/discount_card_barcode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Discount Card Barcode"
+            android:layout_gravity="left|center_vertical"
+            android:layout_margin="5dp"
+            android:textSize="25sp"/>
+
+
+    </LinearLayout>
+</FrameLayout>
