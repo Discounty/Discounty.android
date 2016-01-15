@@ -1,6 +1,8 @@
 package discounty.com.adapters;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +20,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import discounty.com.R;
+import discounty.com.activities.DiscountCardDetailActivity;
+import discounty.com.activities.DiscountCardDetailFragment;
 import discounty.com.data.models.DiscountCard;
 import discounty.com.helpers.Colorize;
 
@@ -41,6 +45,7 @@ public class DiscountCardsListAdapter extends RecyclerView.Adapter<DiscountCards
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         DiscountCard card = records.get(i);
         viewHolder.cardTitleTxt.setText(card.name);
+        viewHolder.discountCard = card;
 
         viewHolder.cardImg.setImageDrawable(TextDrawable.builder()
                 .buildRound(card.name.substring(0, 1).toUpperCase(),
@@ -51,6 +56,13 @@ public class DiscountCardsListAdapter extends RecyclerView.Adapter<DiscountCards
             desc = desc.substring(0, 40) + " ...";
         }
         viewHolder.cardDescriptionTxt.setText(desc);
+
+        viewHolder.view.setOnClickListener(v -> {
+            Context context = v.getContext();
+            Intent intent = new Intent(context, DiscountCardDetailActivity.class);
+            intent.putExtra(DiscountCardDetailFragment.ARG_ITEM_ID, card.getId().longValue());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -69,9 +81,14 @@ public class DiscountCardsListAdapter extends RecyclerView.Adapter<DiscountCards
         @Bind(R.id.card_description)
         TextView cardDescriptionTxt;
 
+        public DiscountCard discountCard;
+
+        public View view;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            view = itemView;
         }
     }
 }

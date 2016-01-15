@@ -156,5 +156,7 @@
 
 
     <string name="toast_crash">Crash report sent</string>
+    <string name="title_discountcard_list">DiscountCards</string>
+    <string name="title_discountcard_detail">DiscountCard Detail</string>
 
 </resources>

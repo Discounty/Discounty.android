@@ -44,9 +44,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MainActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -96,6 +96,20 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="f096425be703c8c0a329de4d59aa7a4f7c50288f" />
+
+        <activity
+            android:name=".activities.DiscountCardListActivity"
+            android:label="@string/title_discountcard_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activities.DiscountCardDetailActivity"
+            android:label="@string/title_discountcard_detail"
+            android:parentActivityName=".activities.DiscountCardListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="discounty.com.activities.DiscountCardListActivity" />
+        </activity>
     </application>
 
 </manifest>

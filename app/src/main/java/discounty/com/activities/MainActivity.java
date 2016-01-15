@@ -254,6 +254,8 @@ public class MainActivity extends AppCompatActivity
 
     public void startAddNewDiscountCardAction(View v) {
         onScan(v);
+//        Intent intent = new Intent(MainActivity.this, DiscountCardListActivity.class);
+//        startActivity(intent);
     }
 
     @Override
