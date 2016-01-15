@@ -46,6 +46,7 @@ import discounty.com.authenticator.AccountGeneral;
 import discounty.com.bus.BusProvider;
 import discounty.com.data.models.Customer;
 import discounty.com.bus.events.NameChangeEvent;
+import discounty.com.fragments.CreateDiscountCardFragment;
 import discounty.com.fragments.DiscountCardsFragment;
 import discounty.com.fragments.ProfileFragment;
 import discounty.com.helpers.BitmapHelper;
@@ -69,6 +70,9 @@ public class MainActivity extends AppCompatActivity
 
     @Bind(R.id.nav_view)
     NavigationView navigationView;
+
+    @Bind(R.id.fab)
+    FloatingActionButton btnFab;
 
     private String TAG = this.getClass().getSimpleName();
 
@@ -103,17 +107,14 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Welcome to Discounty!", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        btnFab.setOnClickListener(this::startAddNewDiscountCardAction);
 
 
         navigationView.getHeaderView(0).setOnClickListener(view -> {
             setFragment(new ProfileFragment());
             setTitle("Profile");
             drawer.closeDrawer(GravityCompat.START);
-            fab.setVisibility(View.INVISIBLE);
+            btnFab.setVisibility(View.INVISIBLE);
         });
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -244,6 +245,35 @@ public class MainActivity extends AppCompatActivity
         super.onPostCreate(savedInstanceState);
     }
 
+    public void onScan(View v) {
+        Intent data = new Intent("com.google.zxing.client.android.SCAN");
+//        data.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "QR_CODE_MODE");
+        startActivityForResult(data, 0);
+    }
+
+    public void startAddNewDiscountCardAction(View v) {
+        onScan(v);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            if (resultCode == MainActivity.RESULT_OK) {
+                String barcode = data.getStringExtra("SCAN_RESULT");
+                String format = data.getStringExtra("SCAN_RESULT_FORMAT");
+
+                final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_layout_main_activity,
+                        CreateDiscountCardFragment.newInstance(barcode, format));
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void setFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -276,18 +306,6 @@ public class MainActivity extends AppCompatActivity
                         MainActivity.this.finish();
                     }
                 }, null);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            if (resultCode == RESULT_OK) {
-                Log.i("App", "RESULT_OK");
-            } else if (resultCode == RESULT_CANCELED)
-                Log.i("App", "RESULT_CANCELED");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
