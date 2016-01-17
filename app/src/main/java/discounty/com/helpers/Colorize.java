@@ -1,5 +1,7 @@
 package discounty.com.helpers;
 
+import android.graphics.Color;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -154,7 +156,8 @@ public class Colorize {
     /**
      * Returns a random hex color string.
      *
-     * @return Random hex <tt>String</tt> color representation.
+     * @return
+     *      Random hex <tt>String</tt> color representation.
      */
     public static String get() {
         return (String) colorsArray[generator.nextInt(colorsArray.length)];
@@ -163,9 +166,11 @@ public class Colorize {
     /**
      * Returns a hex color string
      *
-     * @param colorName the name of the needed color.
-     * @return Hex <tt>String</tt> color representation if it exists,
-     *         and {@code null} if the color doesn't exist in the class.
+     * @param
+     *      colorName the name of the needed color.
+     * @return
+     *      Hex <tt>String</tt> color representation if it exists,
+     *      and {@code null} if the color doesn't exist in the class.
      */
     public static String get(String colorName) {
         return colorsMap.get(colorName);
@@ -175,10 +180,51 @@ public class Colorize {
      * Allows to check if the color by the specified name is
      * available.
      *
-     * @param colorName the name of the color that needs to be checked.
-     * @return <tt>true</tt> if color exists, <tt>false</tt> if color doesn't exist.
+     * @param colorName
+     *      the name of the color that needs to be checked.
+     * @return
+     *      <tt>true</tt> if color exists, <tt>false</tt> if color doesn't exist.
      */
     public static boolean checkColorAvailability(String colorName) {
         return colorsMap.get(colorName) != null;
+    }
+
+    /**
+     * Returns a darker version of specified <code>color</code>.
+     * @param color
+     *      the color that needs to be darkened.
+     * @param factor
+     *      the float factor by which the {@code color} should be darkened.
+     * @return The darker version of a {@code color}.
+     */
+    public static int darken(int color, float factor) {
+        int a = Color.alpha(color);
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+
+        return Color.argb(a,
+                Math.max((int)(r * factor), 0),
+                Math.max((int)(g * factor), 0),
+                Math.max((int)(b * factor), 0));
+    }
+
+    /**
+     * Returns a color with modified alpha channel.
+     * @param color
+     *      the original color.
+     * @param ratio
+     *      the float value by which the alpha channel will be multiplied.
+     * @return
+     *      the new versino of the {@code color}.
+     */
+    public static int modifyAlphaChannel(int color, float ratio) {
+        int newColor = 0;
+        int alpha = Math.round(Color.alpha(color) * ratio);
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+        newColor = Color.argb(alpha, r, g, b);
+        return newColor;
     }
 }

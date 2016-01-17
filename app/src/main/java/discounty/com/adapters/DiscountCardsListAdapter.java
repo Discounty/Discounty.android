@@ -4,8 +4,10 @@ package discounty.com.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,20 +49,25 @@ public class DiscountCardsListAdapter extends RecyclerView.Adapter<DiscountCards
         viewHolder.cardTitleTxt.setText(card.name);
         viewHolder.discountCard = card;
 
+        String colorHex = Colorize.get();
+
         viewHolder.cardImg.setImageDrawable(TextDrawable.builder()
                 .buildRound(card.name.substring(0, 1).toUpperCase(),
-                        Color.parseColor(Colorize.get())));
+                        Color.parseColor(colorHex)));
 
         String desc = card.description;
         if (desc.length() > 40) {
-            desc = desc.substring(0, 40) + " ...";
+            desc = desc.substring(0, 40) + "...";
         }
         viewHolder.cardDescriptionTxt.setText(desc);
+
+        Log.d("ADAPTER_COLOR", " ====> " + colorHex);
 
         viewHolder.view.setOnClickListener(v -> {
             Context context = v.getContext();
             Intent intent = new Intent(context, DiscountCardDetailActivity.class);
             intent.putExtra(DiscountCardDetailFragment.ARG_ITEM_ID, card.getId().longValue());
+            intent.putExtra(DiscountCardDetailFragment.ARG_COLOR, colorHex);
             context.startActivity(intent);
         });
     }

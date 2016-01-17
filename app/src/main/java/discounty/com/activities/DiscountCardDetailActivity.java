@@ -56,6 +56,9 @@ public class DiscountCardDetailActivity extends AppCompatActivity {
             arguments.putLong(DiscountCardDetailFragment.ARG_ITEM_ID,
                     getIntent().getLongExtra(DiscountCardDetailFragment.ARG_ITEM_ID, 0));
 
+            arguments.putString(DiscountCardDetailFragment.ARG_COLOR,
+                    getIntent().getStringExtra(DiscountCardDetailFragment.ARG_COLOR));
+
             DiscountCardDetailFragment fragment = new DiscountCardDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

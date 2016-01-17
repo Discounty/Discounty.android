@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.query.Select;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity
                         // Set customer's name
                         Customer customer = new Select().from(Customer.class).executeSingle();
                         ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_header))
-                                .setText(customer.firstName + ' ' + customer.lastName);
+                                .setText(customer.firstName + " " + customer.lastName);
 
                         String gravatarUrlSmall = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
                                 .size(BitmapHelper.dpToPx(85, getApplicationContext())).build();
@@ -238,7 +239,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        BusProvider.getInstance().unregister(this);
+        try {
+            BusProvider.getInstance().unregister(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -249,6 +254,7 @@ public class MainActivity extends AppCompatActivity
     public void onScan(View v) {
         Intent data = new Intent("com.google.zxing.client.android.SCAN");
         data.putExtra("com.google.zxing.client.android.SCAN.SCAN_MODE", "SCAN_MODE");
+        data.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivityForResult(data, 0);
     }
 
@@ -264,6 +270,15 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == MainActivity.RESULT_OK) {
                 String barcode = data.getStringExtra("SCAN_RESULT");
                 String format = data.getStringExtra("SCAN_RESULT_FORMAT");
+
+                String message = "CODE: " + barcode + "\nFORMAT: " + format;
+
+                MaterialDialog dialog = new MaterialDialog.Builder(this)
+                        .title("Scanning results")
+                        .content(message)
+                        .neutralText(message)
+                        .build();
+                dialog.show();
 
                 getSupportFragmentManager().executePendingTransactions();
                 final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -295,7 +310,7 @@ public class MainActivity extends AppCompatActivity
     public void updateNavDrawerCustomerName(NameChangeEvent event) {
         Log.d("BUS in MainActivity", "NAME CHANGE EVENT FIRED");
         ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_header))
-                .setText(event.getFirstName() + ' ' + event.getLastName());
+                .setText(event.getFirstName() + " " + event.getLastName());
     }
 
 
