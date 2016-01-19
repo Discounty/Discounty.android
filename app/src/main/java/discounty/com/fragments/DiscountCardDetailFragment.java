@@ -139,10 +139,14 @@ public class DiscountCardDetailFragment extends Fragment {
             fabEditBarcode.setColorPressed(parsedColor);
             fabEditBarcode.setColorNormal(parsedColor);
 
-            toolbar.setBackgroundColor(parsedColor);
-            toolbar.setBackgroundTintList(ColorStateList.valueOf(parsedColor));
-            toolbarLayout.setBackgroundColor(parsedColor);
-            toolbarLayout.setContentScrimColor(parsedColor);
+            try {
+                toolbar.setBackgroundColor(parsedColor);
+                toolbar.setBackgroundTintList(ColorStateList.valueOf(parsedColor));
+                toolbarLayout.setBackgroundColor(parsedColor);
+                toolbarLayout.setContentScrimColor(parsedColor);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             Window window = getActivity().getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

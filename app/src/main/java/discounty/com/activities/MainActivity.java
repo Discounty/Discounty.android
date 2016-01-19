@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
+//        try {
             if (resultCode == MainActivity.RESULT_OK) {
                 String barcode = data.getStringExtra("SCAN_RESULT");
                 String format = data.getStringExtra("SCAN_RESULT_FORMAT");
@@ -285,9 +285,9 @@ public class MainActivity extends AppCompatActivity
                 }
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 
