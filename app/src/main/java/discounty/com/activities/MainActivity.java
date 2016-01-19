@@ -288,8 +288,8 @@ public class MainActivity extends AppCompatActivity
 
                 final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_layout_main_activity, fragment);
-//                fragmentTransaction.commitAllowingStateLoss();
-                fragmentTransaction.commit();
+                fragmentTransaction.commitAllowingStateLoss();
+//                fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
 
