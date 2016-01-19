@@ -57,7 +57,8 @@
                         android:inputType="text"
                         android:singleLine="true"
                         android:hint="Name of the card"
-                        android:textColor="@color/oil"/>
+                        android:textColor="@color/oil"
+                        android:cursorVisible="true"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -78,7 +79,25 @@
                         android:lines="7"
                         android:minLines="3"
                         android:gravity="bottom|start"
-                        android:paddingBottom="15dp"/>
+                        android:paddingBottom="15dp"
+                        android:cursorVisible="true"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_input_layout_shop_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="15dp">
+                    <EditText
+                        android:id="@+id/input_shop_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:hint="Shop name"
+                        android:textColor="@color/oil"
+                        android:cursorVisible="true"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -94,7 +113,8 @@
                         android:inputType="text"
                         android:singleLine="true"
                         android:hint="Discount percentage"
-                        android:textColor="@color/oil"/>
+                        android:textColor="@color/oil"
+                        android:cursorVisible="true"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -115,7 +135,8 @@
                         android:lines="4"
                         android:minLines="1"
                         android:gravity="bottom|start"
-                        android:paddingBottom="15dp"/>
+                        android:paddingBottom="15dp"
+                        android:cursorVisible="true"/>
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>

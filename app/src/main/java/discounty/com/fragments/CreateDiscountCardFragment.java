@@ -1,5 +1,7 @@
 package discounty.com.fragments;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,14 +29,22 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import discounty.com.R;
+import discounty.com.activities.LoginActivity;
+import discounty.com.api.ServiceGenerator;
+import discounty.com.authenticator.AccountGeneral;
 import discounty.com.bus.BusProvider;
 import discounty.com.bus.events.DiscountCardsListUpdateEvent;
 import discounty.com.data.models.Barcode;
 import discounty.com.data.models.BarcodeType;
 import discounty.com.data.models.Customer;
 import discounty.com.data.models.DiscountCard;
+import discounty.com.helpers.NetworkHelper;
+import discounty.com.interfaces.DiscountyService;
+import discounty.com.models.AccessToken;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,6 +81,9 @@ public class CreateDiscountCardFragment extends Fragment implements Validator.Va
 
     @Bind(R.id.input_extra_info)
     EditText txtEditExtraInfo;
+
+    @Bind(R.id.input_shop_name)
+    EditText txtEditShopName;
 
     @Bind(R.id.fab_save_discount_card)
     FloatingActionButton fabSaveDiscountCard;
@@ -115,7 +129,7 @@ public class CreateDiscountCardFragment extends Fragment implements Validator.Va
 
 
         RxView.clicks(fabSaveDiscountCard)
-                .debounce(1000, TimeUnit.MILLISECONDS)
+                .debounce(2000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Void>() {
                     @Override
@@ -167,7 +181,7 @@ public class CreateDiscountCardFragment extends Fragment implements Validator.Va
         super.onDestroy();
     }
 
-    private void saveNewCardInDB(Customer customer, String barcodeFormat, String barcodeStr,
+    private DiscountCard saveNewCardInDB(Customer customer, String barcodeFormat, String barcodeStr,
                                  String cardName, String cardDesc, Double discountPercantage,
                                  String extraInfo) {
 
@@ -208,6 +222,7 @@ public class CreateDiscountCardFragment extends Fragment implements Validator.Va
         card.serverId = null;
         card.createdAt = new Date().getTime();
         card.updatedAt = new Date().getTime();
+        // TODO add shop relationship
         card.save();
 
         customer.updatedAt = new Date().getTime();
@@ -216,10 +231,7 @@ public class CreateDiscountCardFragment extends Fragment implements Validator.Va
         // Emit RecyclerView update event
         bus.post(new DiscountCardsListUpdateEvent(customer.discountCards()));
 
-        getFragmentManager().executePendingTransactions();
-        final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout_main_activity, new DiscountCardsFragment());
-        fragmentTransaction.commit();
+        return card;
     }
 
     private void prepareDataAndSaveNewCard() {
@@ -229,8 +241,117 @@ public class CreateDiscountCardFragment extends Fragment implements Validator.Va
         Double discountPercentage = Double.parseDouble(txtEditDiscountPercentage.getText().toString());
         String extraInfo = txtEditExtraInfo.getText().toString();
 
-        saveNewCardInDB(customer, barcodeFormat, barcode, cardName, cardDesc, discountPercentage,
-                extraInfo);
+        DiscountCard card = saveNewCardInDB(customer, barcodeFormat, barcode, cardName,
+                cardDesc, discountPercentage, extraInfo);
+
+        getFragmentManager().executePendingTransactions();
+        final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout_main_activity, new DiscountCardsFragment());
+        fragmentTransaction.commit();
+
+        AccountManager accountManager = AccountManager.get(getContext());
+        persistNewDiscountCardToServerAsync(accountManager, card, txtEditShopName.getText().toString());
+    }
+
+    private void persistNewDiscountCardToServerAsync(AccountManager accountManager, DiscountCard card, String shopName) {
+        Log.d("SAVE DISCOUNT CARD", "INITIATE DISCOUNT CARD SAVING");
+
+        final DiscountyService discountyService = ServiceGenerator.createService(DiscountyService.class);
+
+        if (NetworkHelper.isNetworkConnected(getContext())) {
+
+            Observable.create(new Observable.OnSubscribe<Boolean>() {
+                @Override
+                public void call(Subscriber<? super Boolean> subscriber) {
+
+                    Boolean success = false;
+
+                    final Account account = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0];
+
+                    try {
+
+                        final String name = card.name;
+                        final String description = card.description;
+                        final String barcodeType = card.barcode.barcodeType.barcodeType;
+                        final String barcode = card.barcode.barcode;
+                        final Double discountPercentage = card.barcode.discountPercentage;
+                        final String extraInfo = card.barcode.extraInfo;
+
+                        Log.d("REFRESH TOKEN", accountManager.getUserData(account, LoginActivity.KEY_REFRESH_TOKEN));
+
+                        AccessToken token = discountyService.refreshAccessToken(DiscountyService.REFRESH_GRANT_TYPE,
+                                accountManager.getUserData(account, LoginActivity.KEY_REFRESH_TOKEN)).toBlocking().first();
+
+
+                        if (token != null) {
+                            Log.d("DiscountCard Save", "ACCESS TOKEN\n" + token.getAccessToken());
+
+                            accountManager.setUserData(account, LoginActivity.KEY_REFRESH_TOKEN,
+                                    token.getRefreshToken());
+                            accountManager.setAuthToken(account, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS,
+                                    token.getAccessToken());
+
+                            Log.d("DiscountCard Save", "SET NEW TOKEN TO ACCOUNT");
+
+                            try {
+                                Log.d("DiscountCard Save", "START SAVING DISCOUNT CARD");
+
+                                discounty.com.models.DiscountCard savedCard = discountyService.createDiscountCard(token.getAccessToken(),
+                                        name, description, barcodeType, barcode, discountPercentage,
+                                        extraInfo, shopName).toBlocking().first();
+
+                                if (savedCard != null) {
+
+                                    Log.d("DiscountCard Save", "DISCOUNT CARD SAVING SUCCESS\n" + savedCard.toString());
+
+                                    success = true;
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.d("DiscountCard Save", "ERROR WHEN SAVING DISCOUNT CARD");
+                                success = false;
+                            }
+
+                        }
+
+                    } catch (Exception e) {
+                        success = false;
+                        e.printStackTrace();
+                    }
+
+                    Log.d("Profile Save", "FINISH SAVING DISCOUNT CARD");
+
+                    subscriber.onCompleted();
+                    subscriber.onNext(success);
+                }
+            })
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<Boolean>() {
+                @Override
+                public void onCompleted() {
+                    Log.d("DiscountCard Save", "DiscountCard SUCCESS onCompleted()");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.d("DiscountCard Save", "ERROR onError(e)");
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onNext(Boolean aBoolean) {
+                    if (aBoolean) {
+                        Log.d("DiscountCard Save", "DiscountCard SUCCESS onNext()");
+
+                    } else {
+                        Snackbar.make(getView(), "Problems with the Internet detected", Snackbar.LENGTH_LONG).show();
+                        Log.d("DiscountCard Save", "DiscountCard ERROR onNext()");
+                    }
+                }
+            });
+        }
     }
 
     @Override

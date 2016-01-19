@@ -92,18 +92,19 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        ButterKnife.bind(this);
-
-        bus = BusProvider.getInstance();
-        bus.register(this);
 
         accountManager = AccountManager.get(this);
 
         if (accountManager.getAccountsByType("com.discounty").length == 0) {
             addNewAccount(accountManager);
         } else {
+            setContentView(R.layout.activity_main);
+
+            ButterKnife.bind(this);
+
+            bus = BusProvider.getInstance();
+            bus.register(this);
+
 
             navigationView.getHeaderView(0).getBackground().setColorFilter(Color.rgb(123, 123, 123), PorterDuff.Mode.MULTIPLY);
 
