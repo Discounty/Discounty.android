@@ -204,35 +204,6 @@ public class MainActivity extends AppCompatActivity
             setFragment(new DiscountCardsFragment());
         }
 
-
-
-//        DiscountyService discountyService = ServiceGenerator.createService(DiscountyService.class);
-//
-//        try {
-//            discountyService.getTestGetHello()
-//                    .subscribeOn(Schedulers.newThread())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new Subscriber<String>() {
-//                        @Override
-//                        public void onCompleted() {
-//                            Log.d("onCompleted()", "REQUEST COMPLETED");
-//                        }
-//
-//                        @Override
-//                        public void onError(Throwable e) {
-//                            Log.d("onError()", e.getMessage());
-//                        }
-//
-//                        @Override
-//                        public void onNext(String s) {
-//                            Log.d("onNext()", s);
-//                        }
-//                    });
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//        }
-
-
         // Select discount cards fragment on the start
         navigationView.getMenu().getItem(0).setChecked(true);
     }
@@ -297,7 +268,6 @@ public class MainActivity extends AppCompatActivity
 //            e.printStackTrace();
 //        }
     }
-
 
     public void setFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();

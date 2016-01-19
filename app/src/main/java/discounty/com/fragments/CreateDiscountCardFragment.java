@@ -32,6 +32,7 @@ import discounty.com.data.models.Barcode;
 import discounty.com.data.models.BarcodeType;
 import discounty.com.data.models.Customer;
 import discounty.com.data.models.DiscountCard;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 
 /**
@@ -110,10 +111,28 @@ public class CreateDiscountCardFragment extends Fragment implements Validator.Va
 
         txtEditBarcode.setText(barcode);
 
+        fabSaveDiscountCard.bringToFront();
+
+
         RxView.clicks(fabSaveDiscountCard)
                 .debounce(1000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(v -> validator.validate());
+                .subscribe(new Subscriber<Void>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Void aVoid) {
+                        validator.validate();
+                    }
+                });
 
         return view;
     }
