@@ -20,6 +20,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.activeandroid.query.Select;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import discounty.com.R;
 import discounty.com.data.models.DiscountCard;
@@ -45,9 +47,19 @@ public class DiscountCardDetailFragment extends Fragment {
 
     TextView txtDescription;
 
+    TextView txtName;
+
     CollapsingToolbarLayout toolbarLayout;
 
     Toolbar toolbar;
+
+    FloatingActionsMenu fabEditMenu;
+
+    FloatingActionButton fabDeleteCard;
+
+    FloatingActionButton fabEditCard;
+
+    FloatingActionButton fabEditBarcode;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -96,20 +108,29 @@ public class DiscountCardDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.discountcard_detail, container, false);
 
-        txtDescription = (TextView)rootView.findViewById(R.id.discountcard_detail);
+        txtDescription = (TextView)rootView.findViewById(R.id.discount_card_description);
+        txtName = (TextView)rootView.findViewById(R.id.discount_card_name);
         toolbar = (Toolbar)getActivity().findViewById(R.id.detail_toolbar);
+        fabEditMenu = (FloatingActionsMenu)getActivity().findViewById(R.id.edit_discount_card_fab_menu);
+        fabDeleteCard = (FloatingActionButton)fabEditMenu.findViewById(R.id.fab_delete_discount_card);
+        fabEditCard = (FloatingActionButton)fabEditMenu.findViewById(R.id.fab_edit_discount_card_info);
+        fabEditBarcode = (FloatingActionButton)fabEditMenu.findViewById(R.id.fab_edit_discount_card_barcode);
 
         if (discountCard != null) {
             txtDescription.setText(discountCard.description);
+            txtName.setText(discountCard.name);
         }
 
         Log.d("TOOL_BAR_COLOR", " ====> " + toolbarColorHex);
 
         if (toolbarColorHex != null) {
-            toolbar.setBackgroundColor(Color.parseColor(toolbarColorHex));
-            toolbar.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(toolbarColorHex)));
-            toolbarLayout.setBackgroundColor(Color.parseColor(toolbarColorHex));
-            toolbarLayout.setContentScrimColor(Color.parseColor(toolbarColorHex));
+
+            int parsedColor = Color.parseColor(toolbarColorHex);
+
+            toolbar.setBackgroundColor(parsedColor);
+            toolbar.setBackgroundTintList(ColorStateList.valueOf(parsedColor));
+            toolbarLayout.setBackgroundColor(parsedColor);
+            toolbarLayout.setContentScrimColor(parsedColor);
 
             Window window = getActivity().getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

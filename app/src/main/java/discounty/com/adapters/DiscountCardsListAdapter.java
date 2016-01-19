@@ -74,6 +74,12 @@ public class DiscountCardsListAdapter extends RecyclerView.Adapter<DiscountCards
         return records.size();
     }
 
+    public void swap(List<DiscountCard> records) {
+        this.records.clear();
+        this.records.addAll(records);
+        notifyDataSetChanged();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.discount_card_item_image)

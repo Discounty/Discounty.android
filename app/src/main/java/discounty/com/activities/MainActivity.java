@@ -271,15 +271,6 @@ public class MainActivity extends AppCompatActivity
                 String barcode = data.getStringExtra("SCAN_RESULT");
                 String format = data.getStringExtra("SCAN_RESULT_FORMAT");
 
-                String message = "CODE: " + barcode + "\nFORMAT: " + format;
-
-                MaterialDialog dialog = new MaterialDialog.Builder(this)
-                        .title("Scanning results")
-                        .content(message)
-                        .neutralText("OK")
-                        .build();
-                dialog.show();
-
                 CreateDiscountCardFragment fragment = new CreateDiscountCardFragment();
                 Bundle args = new Bundle();
                 args.putString(CreateDiscountCardFragment.BARCODE_PARAM, barcode);

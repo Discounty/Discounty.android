@@ -45,14 +45,75 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_vertical|start"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:src="@drawable/ic_mode_edit_white_24dp"-->
+        <!--app:layout_anchor="@+id/discountcard_detail_container"-->
+        <!--app:layout_anchorGravity="top|end" />-->
+
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/edit_discount_card_fab_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|start"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_mode_edit_white_24dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="165dp"
         app:layout_anchor="@+id/discountcard_detail_container"
-        app:layout_anchorGravity="top|end" />
+        app:layout_anchorGravity="bottom|end"
+        fab:fab_addButtonColorNormal="@color/colorAccent"
+        fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
+        fab:fab_labelsPosition="left"
+        fab:fab_expandDirection="up"
+        fab:fab_labelStyle="@style/menu_labels_style">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_delete_discount_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/white"
+            fab:fab_title="Delete"
+            fab:fab_icon="@drawable/ic_delete_white_18dp"
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_addButtonColorNormal="@color/colorAccent"
+            fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
+            fab:fab_size="mini"
+            fab:fab_plusIconColor="@color/white"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_edit_discount_card_barcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/white"
+            fab:fab_title="Edit barcode"
+            fab:fab_icon="@drawable/ic_camera_alt_white_18dp"
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_addButtonColorNormal="@color/colorAccent"
+            fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
+            fab:fab_size="mini"
+            fab:fab_plusIconColor="@color/white"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_edit_discount_card_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/white"
+            fab:fab_title="Edit card"
+            fab:fab_icon="@drawable/ic_mode_edit_white_18dp"
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_addButtonColorNormal="@color/colorAccent"
+            fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
+            fab:fab_size="mini"
+            fab:fab_plusIconColor="@color/white"/>
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>

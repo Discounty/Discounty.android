@@ -39,8 +39,8 @@
             android:id="@+id/text_input_layout_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp">
             <EditText
                 android:id="@+id/input_email"
                 android:layout_width="match_parent"

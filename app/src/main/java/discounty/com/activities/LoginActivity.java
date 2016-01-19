@@ -58,6 +58,7 @@ import discounty.com.data.models.Coupon;
 import discounty.com.data.models.DiscountCard;
 import discounty.com.data.models.Feedback;
 import discounty.com.data.models.Shop;
+import discounty.com.helpers.DateHelper;
 import discounty.com.interfaces.DiscountyService;
 import discounty.com.models.AccessToken;
 import discounty.com.models.CardBarcode;
@@ -162,23 +163,7 @@ public class LoginActivity extends AccountAuthenticatorActivity
         RxView.clicks(btnLogin)
                 .debounce(1000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Void>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Void aVoid) {
-                        validator.validate(true);
-                    }
-                });
-//        btnLogin.setOnClickListener(v -> validator.validate(true));
+                .doOnNext(v -> validator.validate(true));
 
         TextView mSignup = (TextView) findViewById(R.id.btn_signup);
         mSignup.setOnClickListener(v -> {
@@ -358,7 +343,6 @@ public class LoginActivity extends AccountAuthenticatorActivity
             // Clear the DB
             new Delete().from(DiscountCard.class).where("_id > ?", -1).execute();
             new Delete().from(Coupon.class).where("_id > ?", -1).execute();
-//            new Delete().from(discounty.com.data.models.Customer.class).where("_id > ?", -1).execute();
             new Delete().from(Barcode.class).where("_id > ?", -1).execute();
             new Delete().from(BarcodeType.class).where("_id > ?", -1).execute();
             new Delete().from(Feedback.class).where("_id > ?", -1).execute();
@@ -390,8 +374,8 @@ public class LoginActivity extends AccountAuthenticatorActivity
             customerAA.phoneNumber = customer.getPhoneNumber();
             customerAA.city = customer.getCity();
             customerAA.country = customer.getCountry();
-            customerAA.createdAt = convertDateStringToLong(customer.getCreatedAt());
-            customerAA.updatedAt = convertDateStringToLong(customer.getUpdatedAt());
+            customerAA.createdAt = DateHelper.convertDateStringToLong(customer.getCreatedAt());
+            customerAA.updatedAt = DateHelper.convertDateStringToLong(customer.getUpdatedAt());
             customerAA.save();
 
             ActiveAndroid.beginTransaction();
@@ -408,8 +392,8 @@ public class LoginActivity extends AccountAuthenticatorActivity
                     barcodeTypeAA.barcodeType = barcodeType.getBarcodeType();
                     barcodeTypeAA.needsSync = false;
                     barcodeTypeAA.serverId = barcodeType.getId();
-                    barcodeTypeAA.createdAt = convertDateStringToLong(barcodeType.getCreatedAt());
-                    barcodeTypeAA.updatedAt = convertDateStringToLong(barcodeType.getUpdatedAt());
+                    barcodeTypeAA.createdAt = DateHelper.convertDateStringToLong(barcodeType.getCreatedAt());
+                    barcodeTypeAA.updatedAt = DateHelper.convertDateStringToLong(barcodeType.getUpdatedAt());
                     barcodeTypeAA.save();
 
                     // Barcode
@@ -417,8 +401,8 @@ public class LoginActivity extends AccountAuthenticatorActivity
                     barcodeAA.needsSync = false;
                     barcodeAA.discountPercentage = Double.parseDouble(barcode.getDiscountPercentage());
                     barcodeAA.extraInfo = barcode.getExtraInfo();
-                    barcodeAA.createdAt = convertDateStringToLong(barcode.getCreatedAt());
-                    barcodeAA.updatedAt = convertDateStringToLong(barcode.getUpdatedAt());
+                    barcodeAA.createdAt = DateHelper.convertDateStringToLong(barcode.getCreatedAt());
+                    barcodeAA.updatedAt = DateHelper.convertDateStringToLong(barcode.getUpdatedAt());
                     barcodeAA.serverId = barcode.getId();
                     barcodeAA.barcodeType = barcodeTypeAA;
                     barcodeAA.customer = customerAA;
@@ -426,8 +410,8 @@ public class LoginActivity extends AccountAuthenticatorActivity
 
                     // DiscountCard
                     new DiscountCard(card.getName(), card.getDescription(), barcodeAA,
-                            convertDateStringToLong(card.getCreatedAt()),
-                            convertDateStringToLong(card.getUpdatedAt()),
+                            DateHelper.convertDateStringToLong(card.getCreatedAt()),
+                            DateHelper.convertDateStringToLong(card.getUpdatedAt()),
                             card.getId(), customerAA, false)
                             .save();
                 }
@@ -439,22 +423,6 @@ public class LoginActivity extends AccountAuthenticatorActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private Long convertDateStringToLong(String date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
-        try {
-            return format.parse(date).getTime();
-        } catch (ParseException e) {
-            return null;
-        }
-    }
-
-    private String convertDateLongToString(Long date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-        Date dateObj = new Date(date);
-        return format.format(dateObj);
     }
 
     private void populateAutoComplete() {
@@ -494,69 +462,6 @@ public class LoginActivity extends AccountAuthenticatorActivity
                 populateAutoComplete();
             }
         }
-    }
-
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
-        // Reset errors.
-        mEmailInput.setError(null);
-        mPasswordInput.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = mEmailInput.getText().toString();
-        String password = mPasswordInput.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordInput.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordInput;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailInput.setError(getString(R.string.error_field_required));
-            focusView = mEmailInput;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailInput.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailInput;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
-        }
-    }
-
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
     }
 
     /**

@@ -21,6 +21,7 @@ import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.animators.FadeInAnimator;
 import com.marshalchen.ultimaterecyclerview.divideritemdecoration.HorizontalDividerItemDecoration;
 import com.marshalchen.ultimaterecyclerview.itemTouchHelper.SimpleItemTouchHelperCallback;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ import butterknife.ButterKnife;
 import discounty.com.R;
 import discounty.com.activities.MainActivity;
 import discounty.com.adapters.DiscountCardsListAdapter;
+import discounty.com.bus.events.DiscountCardsListUpdateEvent;
 import discounty.com.data.models.Customer;
 import discounty.com.data.models.DiscountCard;
 
@@ -59,6 +61,8 @@ public class DiscountCardsFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private RecyclerView.LayoutManager layoutManager;
+
+    private DiscountCardsListAdapter adapter;
 
     public DiscountCardsFragment() {
         // Required empty public constructor
@@ -129,6 +133,10 @@ public class DiscountCardsFragment extends Fragment {
         mListener = null;
     }
 
+    @Subscribe
+    public void updateDiscountCardsRecyclerView(DiscountCardsListUpdateEvent event) {
+        adapter.swap(event.getDiscountCards());
+    }
 
     private void initDiscountCardsRecyclerView() {
         cardsRecyclerView.setHasFixedSize(true);
@@ -139,7 +147,7 @@ public class DiscountCardsFragment extends Fragment {
         Customer customer = new Select().from(Customer.class).executeSingle();
         List<DiscountCard> records = customer.discountCards();
 
-        DiscountCardsListAdapter adapter = new DiscountCardsListAdapter(records);
+        adapter = new DiscountCardsListAdapter(records);
 
         cardsRecyclerView.setAdapter(adapter);
         cardsRecyclerView.setItemAnimator(cardsRecyclerView.getItemAnimator());

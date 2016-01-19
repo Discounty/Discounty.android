@@ -2,31 +2,134 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="discounty.com.fragments.CreateDiscountCardFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="discounty.com.fragments.CreateDiscountCardFragment"
+    android:background="@color/white">
 
-    <LinearLayout
-        android:layout_margin="20dp"
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".activities.MainActivity">
 
-        <TextView
-            android:id="@+id/discount_card_barcode_format"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Discount Card Barcode Format"
-            android:textSize="25sp"
-            android:layout_margin="5dp"/>
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_margin="20dp"
+                android:paddingTop="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/discount_card_barcode"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Discount Card Barcode"
-            android:layout_gravity="left|center_vertical"
-            android:layout_margin="5dp"
-            android:textSize="25sp"/>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_input_layout_barcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="15dp">
+                    <EditText
+                        android:id="@+id/discount_card_barcode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Your discount card barcode"
+                        android:textColor="@color/oil"
+                        android:editable="false"/>
+                </android.support.design.widget.TextInputLayout>
 
 
-    </LinearLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_input_layout_card_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="15dp">
+                    <EditText
+                        android:id="@+id/input_discount_card_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:hint="Name of the card"
+                        android:textColor="@color/oil"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_input_layout_card_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="15dp">
+                    <EditText
+                        android:id="@+id/input_discount_card_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:hint="Description of the card"
+                        android:textColor="@color/oil"
+                        android:scrollbars="vertical"
+                        android:scrollbarStyle="insideInset"
+                        android:lines="7"
+                        android:minLines="3"
+                        android:gravity="bottom|start"
+                        android:paddingBottom="15dp"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_input_layout_discount_percentage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="15dp">
+                    <EditText
+                        android:id="@+id/input_discount_percentage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:hint="Discount percentage"
+                        android:textColor="@color/oil"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_input_layout_extra_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="15dp">
+                    <EditText
+                        android:id="@+id/input_extra_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:hint="Extra information"
+                        android:textColor="@color/oil"
+                        android:scrollbars="vertical"
+                        android:scrollbarStyle="insideInset"
+                        android:lines="4"
+                        android:minLines="1"
+                        android:gravity="bottom|start"
+                        android:paddingBottom="15dp"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_save_discount_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/ic_done_white_24dp"
+            android:tint="@color/white"/>
+
+    </android.support.design.widget.CoordinatorLayout>
 </FrameLayout>
