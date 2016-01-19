@@ -237,6 +237,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.getMenu().getItem(0).setChecked(true);
     }
 
+
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -266,6 +268,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        try {
             if (resultCode == MainActivity.RESULT_OK) {
@@ -278,11 +286,11 @@ public class MainActivity extends AppCompatActivity
                 args.putString(CreateDiscountCardFragment.BARCODE_FORMAT_PARAM, format);
                 fragment.setArguments(args);
 
-                synchronized (lock) {
-                    final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.frame_layout_main_activity, fragment);
-                    fragmentTransaction.commit();
-                }
+                final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.frame_layout_main_activity, fragment);
+//                fragmentTransaction.commitAllowingStateLoss();
+                fragmentTransaction.commit();
+                getSupportFragmentManager().executePendingTransactions();
             }
 
 //        } catch (Exception e) {
