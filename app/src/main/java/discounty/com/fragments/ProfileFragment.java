@@ -37,7 +37,6 @@ import com.squareup.otto.Subscribe;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import discounty.com.DiscountyApp;
 import discounty.com.R;
 import discounty.com.activities.LoginActivity;
 import discounty.com.api.ServiceGenerator;

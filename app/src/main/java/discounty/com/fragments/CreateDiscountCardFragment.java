@@ -89,6 +89,8 @@ public class CreateDiscountCardFragment extends Fragment implements Validator.Va
             barcode = args.getString(BARCODE_PARAM);
             barcodeFormat = args.getString(BARCODE_FORMAT_PARAM);
         }
+
+        getActivity().findViewById(R.id.fab).setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -138,6 +140,12 @@ public class CreateDiscountCardFragment extends Fragment implements Validator.Va
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        getActivity().findViewById(R.id.fab).setVisibility(View.VISIBLE);
+        super.onDestroy();
     }
 
     private void saveNewCardInDB(Customer customer, String barcodeFormat, String barcodeStr,

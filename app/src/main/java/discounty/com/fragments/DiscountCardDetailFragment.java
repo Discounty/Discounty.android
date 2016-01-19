@@ -20,8 +20,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.activeandroid.query.Select;
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import discounty.com.R;
 import discounty.com.data.models.DiscountCard;
@@ -53,7 +53,7 @@ public class DiscountCardDetailFragment extends Fragment {
 
     Toolbar toolbar;
 
-    FloatingActionsMenu fabEditMenu;
+    FloatingActionMenu fabEditMenu;
 
     FloatingActionButton fabDeleteCard;
 
@@ -111,7 +111,7 @@ public class DiscountCardDetailFragment extends Fragment {
         txtDescription = (TextView)rootView.findViewById(R.id.discount_card_description);
         txtName = (TextView)rootView.findViewById(R.id.discount_card_name);
         toolbar = (Toolbar)getActivity().findViewById(R.id.detail_toolbar);
-        fabEditMenu = (FloatingActionsMenu)getActivity().findViewById(R.id.edit_discount_card_fab_menu);
+        fabEditMenu = (FloatingActionMenu)getActivity().findViewById(R.id.edit_discount_card_fab_menu);
         fabDeleteCard = (FloatingActionButton)fabEditMenu.findViewById(R.id.fab_delete_discount_card);
         fabEditCard = (FloatingActionButton)fabEditMenu.findViewById(R.id.fab_edit_discount_card_info);
         fabEditBarcode = (FloatingActionButton)fabEditMenu.findViewById(R.id.fab_edit_discount_card_barcode);
@@ -126,6 +126,18 @@ public class DiscountCardDetailFragment extends Fragment {
         if (toolbarColorHex != null) {
 
             int parsedColor = Color.parseColor(toolbarColorHex);
+
+            fabEditMenu.setMenuButtonColorNormal(parsedColor);
+            fabEditMenu.setMenuButtonColorPressed(parsedColor);
+
+            fabDeleteCard.setColorPressed(parsedColor);
+            fabDeleteCard.setColorNormal(parsedColor);
+
+            fabEditCard.setColorPressed(parsedColor);
+            fabEditCard.setColorNormal(parsedColor);
+
+            fabEditBarcode.setColorPressed(parsedColor);
+            fabEditBarcode.setColorNormal(parsedColor);
 
             toolbar.setBackgroundColor(parsedColor);
             toolbar.setBackgroundTintList(ColorStateList.valueOf(parsedColor));

@@ -56,7 +56,7 @@
         <!--app:layout_anchorGravity="top|end" />-->
 
 
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
+    <com.github.clans.fab.FloatingActionMenu
         xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/edit_discount_card_fab_menu"
         android:layout_width="wrap_content"
@@ -72,13 +72,13 @@
         fab:fab_expandDirection="up"
         fab:fab_labelStyle="@style/menu_labels_style">
 
-        <com.getbase.floatingactionbutton.FloatingActionButton
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_delete_discount_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:tint="@color/white"
+            android:src="@drawable/ic_delete_white_18dp"
             fab:fab_title="Delete"
-            fab:fab_icon="@drawable/ic_delete_white_18dp"
             fab:fab_colorNormal="@color/colorAccent"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_addButtonColorNormal="@color/colorAccent"
@@ -86,13 +86,13 @@
             fab:fab_size="mini"
             fab:fab_plusIconColor="@color/white"/>
 
-        <com.getbase.floatingactionbutton.FloatingActionButton
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_edit_discount_card_barcode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:tint="@color/white"
+            android:src="@drawable/ic_camera_alt_white_18dp"
             fab:fab_title="Edit barcode"
-            fab:fab_icon="@drawable/ic_camera_alt_white_18dp"
             fab:fab_colorNormal="@color/colorAccent"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_addButtonColorNormal="@color/colorAccent"
@@ -100,13 +100,13 @@
             fab:fab_size="mini"
             fab:fab_plusIconColor="@color/white"/>
 
-        <com.getbase.floatingactionbutton.FloatingActionButton
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_edit_discount_card_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:tint="@color/white"
+            android:src="@drawable/ic_mode_edit_white_18dp"
             fab:fab_title="Edit card"
-            fab:fab_icon="@drawable/ic_mode_edit_white_18dp"
             fab:fab_colorNormal="@color/colorAccent"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_addButtonColorNormal="@color/colorAccent"
@@ -114,6 +114,6 @@
             fab:fab_size="mini"
             fab:fab_plusIconColor="@color/white"/>
 
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+    </com.github.clans.fab.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>
