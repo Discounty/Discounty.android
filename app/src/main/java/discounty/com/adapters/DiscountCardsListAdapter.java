@@ -4,8 +4,6 @@ package discounty.com.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.marshalchen.ultimaterecyclerview.dragsortadapter.DragSortAdapter;
 
 import java.util.List;
 
@@ -23,7 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import discounty.com.R;
 import discounty.com.activities.DiscountCardDetailActivity;
-import discounty.com.activities.DiscountCardDetailFragment;
+import discounty.com.fragments.DiscountCardDetailFragment;
 import discounty.com.data.models.DiscountCard;
 import discounty.com.helpers.Colorize;
 

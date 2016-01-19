@@ -24,8 +24,8 @@ import discounty.com.R;
 public class CreateDiscountCardFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String BARCODE_PARAM = "barcode";
-    private static final String BARCODE_FORMAT_PARAM = "barcodeType";
+    public static final String BARCODE_PARAM = "barcode_param";
+    public static final String BARCODE_FORMAT_PARAM = "barcode_format_param";
 
     private String barcode;
     private String barcodeFormat;
@@ -42,31 +42,15 @@ public class CreateDiscountCardFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param barcode Discount card barcode.
-     * @param barcodeFormat Discount card barcode format.
-     * @return A new instance of fragment CreateDiscountCardFragment.
-     */
-    public static CreateDiscountCardFragment newInstance(String barcode, String barcodeFormat) {
-        CreateDiscountCardFragment fragment = new CreateDiscountCardFragment();
-        Bundle args = new Bundle();
-        args.putString(BARCODE_PARAM, barcode);
-        args.putString(BARCODE_FORMAT_PARAM, barcodeFormat);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            barcode = getArguments().getString(BARCODE_PARAM);
-            barcodeFormat = getArguments().getString(BARCODE_FORMAT_PARAM);
 
-
+        Bundle args = getArguments();
+        if (args != null && args.containsKey(BARCODE_PARAM) && args.containsKey(BARCODE_FORMAT_PARAM)) {
+            barcode = args.getString(BARCODE_PARAM);
+            barcodeFormat = args.getString(BARCODE_FORMAT_PARAM);
         }
     }
 

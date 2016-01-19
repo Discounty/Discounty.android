@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -58,7 +57,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
+        implements
+        NavigationView.OnNavigationItemSelectedListener,
         DiscountCardsFragment.OnFragmentInteractionListener,
         CreateDiscountCardFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener {
@@ -276,14 +276,19 @@ public class MainActivity extends AppCompatActivity
                 MaterialDialog dialog = new MaterialDialog.Builder(this)
                         .title("Scanning results")
                         .content(message)
-                        .neutralText(message)
+                        .neutralText("OK")
                         .build();
                 dialog.show();
 
+                CreateDiscountCardFragment fragment = new CreateDiscountCardFragment();
+                Bundle args = new Bundle();
+                args.putString(CreateDiscountCardFragment.BARCODE_PARAM, barcode);
+                args.putString(CreateDiscountCardFragment.BARCODE_FORMAT_PARAM, format);
+                fragment.setArguments(args);
+
                 getSupportFragmentManager().executePendingTransactions();
                 final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frame_layout_main_activity,
-                        CreateDiscountCardFragment.newInstance(barcode, format));
+                fragmentTransaction.replace(R.id.frame_layout_main_activity, fragment);
                 fragmentTransaction.commit();
             }
 

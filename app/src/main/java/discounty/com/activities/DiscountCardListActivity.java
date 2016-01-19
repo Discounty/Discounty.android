@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import discounty.com.R;
 
 import discounty.com.activities.dummy.DummyContent;
+import discounty.com.fragments.DiscountCardDetailFragment;
 
 import java.util.List;
 

@@ -6,5 +6,5 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:textIsSelectable="true"
-    tools:context="discounty.com.activities.DiscountCardDetailFragment"
+    tools:context=".fragments.DiscountCardDetailFragment"
     android:background="@color/white"/>

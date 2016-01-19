@@ -1,4 +1,4 @@
-package discounty.com.activities;
+package discounty.com.fragments;
 
 import android.app.Activity;
 import android.content.res.ColorStateList;
@@ -21,11 +21,7 @@ import android.widget.TextView;
 
 import com.activeandroid.query.Select;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import discounty.com.R;
-import discounty.com.activities.dummy.DummyContent;
-import discounty.com.data.models.Customer;
 import discounty.com.data.models.DiscountCard;
 import discounty.com.helpers.Colorize;
 
@@ -47,13 +43,10 @@ public class DiscountCardDetailFragment extends Fragment {
 
     private int colorId;
 
-//    @Bind(R.id.discountcard_detail)
     TextView txtDescription;
 
-//    @Bind(R.id.toolbar_layout)
     CollapsingToolbarLayout toolbarLayout;
 
-//    @Bind(R.id.detail_toolbar)
     Toolbar toolbar;
 
     /**
@@ -104,7 +97,6 @@ public class DiscountCardDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.discountcard_detail, container, false);
 
         txtDescription = (TextView)rootView.findViewById(R.id.discountcard_detail);
-//        toolbarLayout = (CollapsingToolbarLayout)getActivity().findViewById(R.id.toolbar_layout);
         toolbar = (Toolbar)getActivity().findViewById(R.id.detail_toolbar);
 
         if (discountCard != null) {
@@ -123,7 +115,6 @@ public class DiscountCardDetailFragment extends Fragment {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Colorize.darken(Color.parseColor(toolbarColorHex), 0.5f));
-//            window.setStatusBarColor(Colorize.modifyAlphaChannel(Color.parseColor(toolbarColorHex), 0.2f));
         }
 
         return rootView;
