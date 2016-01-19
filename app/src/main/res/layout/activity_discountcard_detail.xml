@@ -66,11 +66,11 @@
         android:layout_marginTop="165dp"
         app:layout_anchor="@+id/discountcard_detail_container"
         app:layout_anchorGravity="bottom|end"
-        fab:fab_addButtonColorNormal="@color/colorAccent"
-        fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
+        fab:menu_colorNormal="@color/colorAccent"
+        fab:menu_colorPressed="@color/colorPrimaryDark"
         fab:fab_labelsPosition="left"
-        fab:fab_expandDirection="up"
-        fab:fab_labelStyle="@style/menu_labels_style">
+        fab:menu_openDirection="up"
+        fab:menu_labels_style="@style/menu_labels_style">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_delete_discount_card"
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:tint="@color/white"
             android:src="@drawable/ic_delete_white_18dp"
-            fab:fab_title="Delete"
+            fab:fab_label="Delete"
             fab:fab_colorNormal="@color/colorAccent"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_addButtonColorNormal="@color/colorAccent"
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:tint="@color/white"
             android:src="@drawable/ic_camera_alt_white_18dp"
-            fab:fab_title="Edit barcode"
+            fab:fab_label="Edit barcode"
             fab:fab_colorNormal="@color/colorAccent"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_addButtonColorNormal="@color/colorAccent"
@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:tint="@color/white"
             android:src="@drawable/ic_mode_edit_white_18dp"
-            fab:fab_title="Edit card"
+            fab:fab_label="Edit card"
             fab:fab_colorNormal="@color/colorAccent"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_addButtonColorNormal="@color/colorAccent"
