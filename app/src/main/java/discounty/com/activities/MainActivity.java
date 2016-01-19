@@ -103,109 +103,110 @@ public class MainActivity extends AppCompatActivity
 
         if (accountManager.getAccountsByType("com.discounty").length == 0) {
             addNewAccount(accountManager);
-        }
+        } else {
 
-        navigationView.getHeaderView(0).getBackground().setColorFilter(Color.rgb(123, 123, 123), PorterDuff.Mode.MULTIPLY);
+            navigationView.getHeaderView(0).getBackground().setColorFilter(Color.rgb(123, 123, 123), PorterDuff.Mode.MULTIPLY);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        btnFab.setOnClickListener(this::startAddNewDiscountCardAction);
-
-
-        navigationView.getHeaderView(0).setOnClickListener(view -> {
-            setFragment(new ProfileFragment());
-            setTitle("Profile");
-            drawer.closeDrawer(GravityCompat.START);
-            btnFab.setVisibility(View.INVISIBLE);
-        });
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        final CircleImageView imgAvatar = (CircleImageView) navigationView.getHeaderView(0).findViewById(R.id.img_avatar);
+            btnFab.setOnClickListener(this::startAddNewDiscountCardAction);
 
 
-        Account account = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0];
-        ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_subheader)).setText(account.name);
-
-        Customer customerTest = new Select().from(Customer.class).executeSingle();
-        Log.d("CURRENT CUSTOMER INFO", customerTest.firstName + " " + customerTest.lastName);
-
-
-        Log.d("EMAIL URL", account.name);
-
-        try {
-            Observable<Bitmap[]> observable = Observable.create(new Observable.OnSubscribe<Bitmap[]>() {
-
-                @Override
-                public void call(Subscriber<? super Bitmap[]> subscriber) {
-                    try {
-                        // Set customer's name
-                        Customer customer = new Select().from(Customer.class).executeSingle();
-                        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_header))
-                                .setText(customer.firstName + " " + customer.lastName);
-
-                        String gravatarUrlSmall = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
-                                .size(BitmapHelper.dpToPx(85, getApplicationContext())).build();
-
-                        Bitmap smallAvatar = Picasso.with(getApplicationContext()).load(gravatarUrlSmall).get();
-
-                        try {
-                            customer.avatarSmall = BitmapHelper.bitmapToBase64(smallAvatar.copy(smallAvatar.getConfig(), true));
-                            customer.save();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        // result[0] - small avatar for nav drawer,
-                        // result[1] - big avatar for profile fragment.
-                        Bitmap[] result = new Bitmap[]{smallAvatar};
-
-                        subscriber.onNext(result);
-                        subscriber.onCompleted();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+            navigationView.getHeaderView(0).setOnClickListener(view -> {
+                setFragment(new ProfileFragment());
+                setTitle("Profile");
+                drawer.closeDrawer(GravityCompat.START);
+                btnFab.setVisibility(View.INVISIBLE);
             });
 
-            Subscriber<Bitmap[]> subscriber = new Subscriber<Bitmap[]>() {
-                @Override
-                public void onCompleted() {
-                    Log.d("BITMAP SUBSCRIBER", "SUCCESS");
-                }
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
-                @Override
-                public void onError(Throwable e) {
-                    e.printStackTrace();
-                }
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
 
-                @Override
-                public void onNext(Bitmap[] bitmaps) {
-                    imgAvatar.setImageBitmap(BitmapHelper.getCircleBitmap(bitmaps[0]));
-                }
-            };
+            final CircleImageView imgAvatar = (CircleImageView) navigationView.getHeaderView(0).findViewById(R.id.img_avatar);
 
-            observable.subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(subscriber);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            Account account = accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0];
+            ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_subheader)).setText(account.name);
+
+            Customer customerTest = new Select().from(Customer.class).executeSingle();
+            Log.d("CURRENT CUSTOMER INFO", customerTest.firstName + " " + customerTest.lastName);
+
+
+            Log.d("EMAIL URL", account.name);
+
+            try {
+                Observable<Bitmap[]> observable = Observable.create(new Observable.OnSubscribe<Bitmap[]>() {
+
+                    @Override
+                    public void call(Subscriber<? super Bitmap[]> subscriber) {
+                        try {
+                            // Set customer's name
+                            Customer customer = new Select().from(Customer.class).executeSingle();
+                            ((TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_header_txt_header))
+                                    .setText(customer.firstName + " " + customer.lastName);
+
+                            String gravatarUrlSmall = Gravatar.init().with(accountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE)[0].name)
+                                    .size(BitmapHelper.dpToPx(85, getApplicationContext())).build();
+
+                            Bitmap smallAvatar = Picasso.with(getApplicationContext()).load(gravatarUrlSmall).get();
+
+                            try {
+                                customer.avatarSmall = BitmapHelper.bitmapToBase64(smallAvatar.copy(smallAvatar.getConfig(), true));
+                                customer.save();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            // result[0] - small avatar for nav drawer,
+                            // result[1] - big avatar for profile fragment.
+                            Bitmap[] result = new Bitmap[]{smallAvatar};
+
+                            subscriber.onNext(result);
+                            subscriber.onCompleted();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                Subscriber<Bitmap[]> subscriber = new Subscriber<Bitmap[]>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("BITMAP SUBSCRIBER", "SUCCESS");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(Bitmap[] bitmaps) {
+                        imgAvatar.setImageBitmap(BitmapHelper.getCircleBitmap(bitmaps[0]));
+                    }
+                };
+
+                observable.subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(subscriber);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            if (savedInstanceState == null) {
+                setFragment(new DiscountCardsFragment());
+            }
+
+            // Select discount cards fragment on the start
+            navigationView.getMenu().getItem(0).setChecked(true);
         }
-
-
-        if (savedInstanceState == null) {
-            setFragment(new DiscountCardsFragment());
-        }
-
-        // Select discount cards fragment on the start
-        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
 
