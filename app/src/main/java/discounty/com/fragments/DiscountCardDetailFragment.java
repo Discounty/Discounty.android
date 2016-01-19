@@ -135,7 +135,7 @@ public class DiscountCardDetailFragment extends Fragment {
             Window window = getActivity().getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Colorize.darken(Color.parseColor(toolbarColorHex), 0.5f));
+            window.setStatusBarColor(Colorize.darken(parsedColor, 0.5f));
         }
 
         return rootView;

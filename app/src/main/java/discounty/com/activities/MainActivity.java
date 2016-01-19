@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
+//        try {
             if (resultCode == MainActivity.RESULT_OK) {
                 String barcode = data.getStringExtra("SCAN_RESULT");
                 String format = data.getStringExtra("SCAN_RESULT_FORMAT");
@@ -277,15 +277,15 @@ public class MainActivity extends AppCompatActivity
                 args.putString(CreateDiscountCardFragment.BARCODE_FORMAT_PARAM, format);
                 fragment.setArguments(args);
 
-                getSupportFragmentManager().executePendingTransactions();
+//                getSupportFragmentManager().executePendingTransactions();
                 final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.frame_layout_main_activity, fragment);
                 fragmentTransaction.commit();
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 
