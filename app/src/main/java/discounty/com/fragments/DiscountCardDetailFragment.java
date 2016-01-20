@@ -32,9 +32,11 @@ import com.github.clans.fab.FloatingActionMenu;
 import discounty.com.R;
 import discounty.com.data.models.DiscountCard;
 import discounty.com.google.zxing.WriterException;
+import discounty.com.google.zxing.common.StringUtils;
 import discounty.com.helpers.BarcodeEncoder;
 import discounty.com.helpers.BitmapHelper;
 import discounty.com.helpers.Colorize;
+import discounty.com.helpers.NumbersHelper;
 import discounty.com.helpers.Operation;
 import discounty.com.helpers.OperationHelper;
 
@@ -61,6 +63,10 @@ public class DiscountCardDetailFragment extends Fragment {
     TextView txtDescription;
 
     TextView txtName;
+
+    TextView txtExtraInfo;
+
+    TextView txtDiscountPercentage;
 
     CollapsingToolbarLayout toolbarLayout;
 
@@ -150,6 +156,8 @@ public class DiscountCardDetailFragment extends Fragment {
 
         txtDescription = (TextView)rootView.findViewById(R.id.discount_card_description);
         txtName = (TextView)rootView.findViewById(R.id.discount_card_name);
+        txtExtraInfo = (TextView)rootView.findViewById(R.id.discount_card_extra_info);
+        txtDiscountPercentage = (TextView)rootView.findViewById(R.id.discount_card_discount_percentage);
         imgBarcode = (ImageView)rootView.findViewById(R.id.barcode_image_view);
         toolbar = (Toolbar)getActivity().findViewById(R.id.detail_toolbar);
         fabEditMenu = (FloatingActionMenu)getActivity().findViewById(R.id.edit_discount_card_fab_menu);
@@ -160,6 +168,12 @@ public class DiscountCardDetailFragment extends Fragment {
         if (discountCard != null) {
             txtDescription.setText(discountCard.description);
             txtName.setText(discountCard.name);
+            txtExtraInfo.setText(discountCard.barcode.extraInfo);
+
+            Double discountPercentage = discountCard.barcode.discountPercentage;
+            if (discountPercentage != null) {
+                txtDiscountPercentage.setText(discountCard.barcode.discountPercentage.toString() + "%");
+            }
         }
 
         Log.d("TOOL_BAR_COLOR", " ====> " + toolbarColorHex);
