@@ -119,6 +119,31 @@ public class DiscountCardDetailFragment extends Fragment {
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            try {
+                getActivity().findViewById(R.id.edit_discount_card_fab_menu).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.detail_toolbar).setVisibility(View.GONE);
+                getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
+                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                getActivity().findViewById(R.id.edit_discount_card_fab_menu).setVisibility(View.VISIBLE);
+                getActivity().findViewById(R.id.detail_toolbar).setVisibility(View.VISIBLE);
+                getActivity().requestWindowFeature(Window.FEATURE_ACTION_BAR);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.discountcard_detail, container, false);
