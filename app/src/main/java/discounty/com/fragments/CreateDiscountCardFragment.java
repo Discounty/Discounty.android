@@ -302,6 +302,10 @@ public class CreateDiscountCardFragment extends Fragment implements Validator.Va
 
                                 if (savedCard != null) {
 
+                                    card.serverId = savedCard.getId();
+                                    card.barcode.serverId = savedCard.getBarcode().getId();
+                                    card.barcode.save();
+                                    card.save();
                                     Log.d("DiscountCard Save", "DISCOUNT CARD SAVING SUCCESS\n" + savedCard.toString());
 
                                     success = true;

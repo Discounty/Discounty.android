@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_margin="20dp"
-            android:paddingTop="20dp"
+            android:layout_margin="0dp"
+            android:paddingTop="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -28,7 +28,8 @@
                 android:textIsSelectable="true"
                 tools:context=".fragments.DiscountCardDetailFragment"
                 android:textColor="@color/oil"
-                android:text="Card name"/>
+                android:text="Card name"
+                android:visibility="gone"/>
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
@@ -40,14 +41,15 @@
                 android:textIsSelectable="true"
                 tools:context=".fragments.DiscountCardDetailFragment"
                 android:textColor="@color/oil"
-                android:text="Card description"/>
+                android:text="Card description"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/barcode_image_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@drawable/share_via_barcode"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="0dp"
                 android:contentDescription="Barcode picture"
                 android:adjustViewBounds="true"/>
 
