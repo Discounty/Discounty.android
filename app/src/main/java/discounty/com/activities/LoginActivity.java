@@ -160,25 +160,26 @@ public class LoginActivity extends AccountAuthenticatorActivity
 
         mPasswordInput = (EditText) findViewById(R.id.input_password);
 
-        RxView.clicks(btnLogin)
-                .debounce(1000, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Void>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Void aVoid) {
-                        validator.validate(true);
-                    }
-                });
+        btnLogin.setOnClickListener(v -> validator.validate(true));
+//        RxView.clicks(btnLogin)
+//                .debounce(1000, TimeUnit.MILLISECONDS)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<Void>() {
+//                    @Override
+//                    public void onCompleted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(Void aVoid) {
+//                        validator.validate(true);
+//                    }
+//                });
 
         TextView mSignup = (TextView) findViewById(R.id.btn_signup);
         mSignup.setOnClickListener(v -> {

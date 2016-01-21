@@ -128,25 +128,26 @@ public class CreateDiscountCardFragment extends Fragment implements Validator.Va
         fabSaveDiscountCard.bringToFront();
 
 
-        RxView.clicks(fabSaveDiscountCard)
-                .debounce(2000, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Void>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Void aVoid) {
-                        validator.validate();
-                    }
-                });
+        fabSaveDiscountCard.setOnClickListener(v -> validator.validate());
+//        RxView.clicks(fabSaveDiscountCard)
+//                .debounce(2000, TimeUnit.MILLISECONDS)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<Void>() {
+//                    @Override
+//                    public void onCompleted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(Void aVoid) {
+//                        validator.validate();
+//                    }
+//                });
 
         return view;
     }
